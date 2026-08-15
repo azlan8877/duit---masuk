@@ -53,7 +53,77 @@
     <nav><button onclick="show('home')">⌂<small>Utama</small></button><button onclick="show('accounts')">▤<small>Akaun</small></button><button class="add" onclick="openAdd()">＋</button><button class="active">▥<small>Item Beli</small></button><button>◯<small>Profil</small></button></nav>
   </section>
 </div>
+<section class="screen hidden" id="report">
+  <header class="pagehead">
+    <button onclick="show('home')">‹</button>
+    <h2>Laporan</h2>
+    <button onclick="show('home')">⌂</button>
+  </header>
 
+  <div style="padding:20px;">
+
+    <div class="card" style="margin-bottom:15px;">
+      <small>Duit Masuk</small>
+      <strong id="reportIncome">RM 0.00</strong>
+    </div>
+
+    <div class="card" style="margin-bottom:15px;">
+      <small>Duit Keluar</small>
+      <strong id="reportExpense">RM 0.00</strong>
+    </div>
+
+    <div class="balance" style="margin-bottom:20px;">
+      <div>
+        <small>Baki</small>
+        <strong id="reportBalance">RM 0.00</strong>
+      </div>
+      <span>📊</span>
+    </div>
+
+    <h3>Ringkasan</h3>
+
+    <div class="list">
+
+      <div class="row">
+        <b>Jumlah transaksi</b>
+        <span id="reportCount">0</span>
+      </div>
+
+      <div class="row">
+        <b>Purata perbelanjaan</b>
+        <span id="reportAverage">RM 0.00</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <nav>
+    <button onclick="show('home')">
+      ⌂
+      <small>Utama</small>
+    </button>
+
+    <button onclick="show('accounts')">
+      ▤
+      <small>Akaun</small>
+    </button>
+
+    <button class="add" onclick="openAdd()">
+      ＋
+    </button>
+
+    <button onclick="show('items')">
+      ▥
+      <small>Item Beli</small>
+    </button>
+
+    <button class="active">
+      📊
+      <small>Laporan</small>
+    </button>
+  </nav>
+</section>
 <div class="modal hidden" id="modal">
   <div class="sheet">
     <button class="close" onclick="closeModal()">×</button>
