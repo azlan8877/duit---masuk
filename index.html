@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173b2b">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+<title>Duit Masuk</title>
+</head>
+<body>
+<div id="app">
+  <section class="screen" id="welcome">
+    <div class="welcome-art"><div class="logo">↗</div><span>+</span><i></i></div>
+    <div class="welcome-copy">
+      <h1>Duit Masuk,<br>Hidup Teratur.</h1>
+      <p>Catat pendapatan, kawal perbelanjaan dan capai matlamat kewangan anda.</p>
+    </div>
+    <button class="primary" onclick="show('home')">Mulakan</button>
+    <button class="linkbtn" onclick="show('home')">Log masuk</button>
+  </section>
+
+  <section class="screen hidden" id="home">
+    <header class="topbar"><div class="hamb">☰</div><div class="bell">♧</div></header>
+    <div class="greeting"><h2>Hai! 👋</h2><p>Jom urus kewangan dengan lebih bijak.</p></div>
+    <div class="summary-grid">
+      <div class="card"><small>Duit Masuk</small><strong id="incomeTotal">RM 0.00</strong><em class="down">↓</em></div>
+      <div class="card"><small>Duit Keluar</small><strong id="expenseTotal">RM 0.00</strong><em class="up">↑</em></div>
+    </div>
+    <div class="balance"><div><small>Baki Semasa</small><strong id="balance">RM 0.00</strong></div><span>▰</span></div>
+    <div class="section-title"><b>Ringkasan Bulan Ini</b><a onclick="show('accounts')">Lihat semua</a></div>
+    <div class="list">
+      <div class="row"><span class="dot green">↓</span><b>Pendapatan</b><span id="incomeRow">RM 0.00</span></div>
+      <div class="row"><span class="dot pink">↗</span><b>Perbelanjaan</b><span id="expenseRow">RM 0.00</span></div>
+      <div class="row"><span class="dot gold">▣</span><b>Simpanan</b><span id="savingRow">RM 0.00</span></div>
+    </div>
+    <div class="section-title"><b>Transaksi Terbaru</b><a onclick="show('items')">Lihat semua</a></div>
+    <div id="recent" class="list"></div>
+    <nav><button class="active" onclick="show('home')">⌂<small>Utama</small></button><button onclick="show('accounts')">▤<small>Akaun</small></button><button class="add" onclick="openAdd()">＋</button><button onclick="show('items')">▥<small>Item Beli</small></button><button>◯<small>Profil</small></button></nav>
+  </section>
+
+  <section class="screen hidden" id="accounts">
+    <header class="pagehead"><button onclick="show('home')">‹</button><h2>Akaun</h2><button onclick="openAccount()">＋</button></header>
+    <div class="chips"><button class="chip active">Semua</button><button class="chip">Bank</button><button class="chip">E-Wallet</button><button class="chip">Tunai</button></div>
+    <h3>Akaun Saya</h3><div id="accountList"></div>
+    <div class="totalbox"><small>Jumlah Keseluruhan</small><strong id="accountTotal">RM 0.00</strong></div>
+    <nav><button onclick="show('home')">⌂<small>Utama</small></button><button class="active">▤<small>Akaun</small></button><button class="add" onclick="openAdd()">＋</button><button onclick="show('items')">▥<small>Item Beli</small></button><button>◯<small>Profil</small></button></nav>
+  </section>
+
+  <section class="screen hidden" id="items">
+    <header class="pagehead"><button onclick="show('home')">‹</button><h2>Item Beli</h2><button onclick="openAdd()">＋</button></header>
+    <div id="itemList" class="item-list"></div>
+    <nav><button onclick="show('home')">⌂<small>Utama</small></button><button onclick="show('accounts')">▤<small>Akaun</small></button><button class="add" onclick="openAdd()">＋</button><button class="active">▥<small>Item Beli</small></button><button>◯<small>Profil</small></button></nav>
+  </section>
+</div>
+
+<div class="modal hidden" id="modal">
+  <div class="sheet">
+    <button class="close" onclick="closeModal()">×</button>
+    <h2 id="modalTitle">Tambah Transaksi</h2>
+    <div class="toggle"><button id="incomeTab" class="sel" onclick="setType('income')">Duit Masuk</button><button id="expenseTab" onclick="setType('expense')">Duit Keluar</button></div>
+    <label>Nama / Item<input id="name" placeholder="Contoh: Gaji / Barang dapur"></label>
+    <label>Jumlah (RM)<input id="amount" type="number" inputmode="decimal" placeholder="0.00"></label>
+    <label>Kategori<input id="category" placeholder="Contoh: Gaji, Keperluan Harian"></label>
+    <button class="primary" onclick="saveTx()">Simpan</button>
+  </div>
+</div>
+
+<div class="modal hidden" id="accountModal">
+  <div class="sheet">
+    <button class="close" onclick="closeAccount()">×</button>
+    <h2>Tambah Akaun</h2>
+    <label>Nama Akaun<input id="accName" placeholder="Contoh: Maybank"></label>
+    <label>Baki (RM)<input id="accAmount" type="number" inputmode="decimal" placeholder="0.00"></label>
+    <button class="primary" onclick="saveAccount()">Simpan</button>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
