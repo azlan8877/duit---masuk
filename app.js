@@ -160,7 +160,7 @@ function renderAccounts() {
   }
 
   list.innerHTML = accounts.map(a => `
-    <div class="row">
+    <div class="row" style="display:flex;justify-content:space-between;align-items:center;gap:16px;">
       <b>${escapeHtml(a.name)}</b>
       <span>${money(a.amount)}</span>
     </div>
