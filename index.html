@@ -1,844 +1,993 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#173b2b">
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
-  <title>Duit Masuk</title>
-
-  <style>
-    /* =========================
-       ASAS
-       ========================= */
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background: #eee8dd;
-      color: #17251f;
-      font-family: Arial, sans-serif;
-    }
-
-    button,
-    input,
-    select {
-      font: inherit;
-    }
-
-    .screen {
-      min-height: 100vh;
-      padding: 24px 18px 50px;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .app-card {
-      width: min(100%, 620px);
-      margin: 0 auto;
-      background: #faf9f5;
-      border-radius: 30px;
-      min-height: calc(100vh - 48px);
-      padding: 24px;
-    }
-
-    /* =========================
-       HEADER
-       ========================= */
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-    }
-
-    .hamb,
-    .bell {
-      font-size: 28px;
-      line-height: 1;
-    }
-
-    .back {
-      border: 0;
-      background: transparent;
-      font-size: 34px;
-      cursor: pointer;
-      padding: 0 8px;
-    }
-
-    .page-title {
-      font-size: 30px;
-      font-weight: 800;
-      text-align: center;
-      flex: 1;
-    }
-
-    .plus {
-      border: 0;
-      background: transparent;
-      font-size: 42px;
-      line-height: 1;
-      cursor: pointer;
-    }
-
-    /* =========================
-       WELCOME
-       ========================= */
-
-    .welcome-art {
-      text-align: center;
-      padding: 35px 10px;
-    }
-
-    .logo {
-      width: 70px;
-      height: 70px;
-      border-radius: 22px;
-      background: #1e4a39;
-      margin: 0 auto 30px;
-    }
-
-    .welcome-art h1 {
-      font-size: 34px;
-      margin-bottom: 15px;
-    }
-
-    .welcome-art p {
-      color: #747b76;
-      line-height: 1.6;
-    }
-
-    .primary,
-    .linkbtn {
-      width: 100%;
-      padding: 16px;
-      border-radius: 16px;
-      border: 0;
-      margin-top: 14px;
-      cursor: pointer;
-    }
-
-    .primary {
-      background: #1e4a39;
-      color: white;
-      font-weight: 700;
-    }
-
-    .linkbtn {
-      background: #eee8dd;
-      color: #1e4a39;
-      font-weight: 700;
-    }
-
-    /* =========================
-       HOME
-       ========================= */
-
-    .greeting h2 {
-      font-size: 26px;
-      margin: 0 0 5px;
-    }
-
-    .greeting p {
-      color: #7a817c;
-      margin-top: 0;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid #e8e4da;
-      border-radius: 22px;
-      padding: 20px;
-    }
-
-    .card small {
-      display: block;
-      color: #818983;
-      margin-bottom: 8px;
-    }
-
-    .card strong {
-      display: block;
-      font-size: 23px;
-    }
-
-    .card em {
-      display: block;
-      margin-top: 12px;
-      font-style: normal;
-      text-align: right;
-      font-size: 22px;
-    }
-
-    .down {
-      color: #32815d;
-    }
-
-    .up {
-      color: #d56e79;
-    }
-
-    .balance {
-      margin-top: 14px;
-      background: #204c3b;
-      color: white;
-      border-radius: 23px;
-      padding: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .balance small {
-      display: block;
-      opacity: .75;
-      margin-bottom: 6px;
-    }
-
-    .balance strong {
-      font-size: 34px;
-    }
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 28px 2px 12px;
-    }
-
-    .section-title b {
-      font-size: 20px;
-    }
-
-    .section-title a {
-      color: #707a73;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .list {
-      background: white;
-      border: 1px solid #e7e3d9;
-      border-radius: 22px;
-      overflow: hidden;
-    }
-
-    .row {
-      min-height: 76px;
-      padding: 16px 18px;
-      border-bottom: 1px solid #eeeae2;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    }
-
-    .row:last-child {
-      border-bottom: 0;
-    }
-
-    .row-left {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .row-left b {
-      display: block;
-      font-size: 17px;
-      line-height: 1.25;
-      overflow-wrap: anywhere;
-    }
-
-    .row-left small {
-      display: block;
-      color: #777e79;
-      margin-top: 5px;
-    }
-
-    .amount {
-      flex-shrink: 0;
-      white-space: nowrap;
-      font-weight: 600;
-      text-align: right;
-    }
-
-    .dot {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .dot.green {
-      background: #d9f1e1;
-      color: #28734d;
-    }
-
-    .dot.pink {
-      background: #f9dce0;
-      color: #c85e6b;
-    }
-
-    /* =========================
-       PAGE ITEM / AKAUN
-       ========================= */
-
-    .page-list {
-      margin-top: 40px;
-    }
-
-    /* =========================
-       LAPORAN
-       ========================= */
-
-    .report-box {
-      margin-top: 28px;
-    }
-
-    .report-card {
-      background: white;
-      border: 1px solid #e6e2d9;
-      border-radius: 22px;
-      overflow: hidden;
-      margin-bottom: 18px;
-    }
-
-    .report-card .report-row {
-      min-height: 82px;
-      padding: 20px 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      border-bottom: 1px solid #eeeae2;
-    }
-
-    .report-card .report-row:last-child {
-      border-bottom: 0;
-    }
-
-    .report-label {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .report-label b {
-      display: block;
-      font-size: 17px;
-      line-height: 1.3;
-    }
-
-    .report-value {
-      flex-shrink: 0;
-      min-width: 110px;
-      text-align: right;
-      font-size: 17px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .report-balance {
-      background: #204c3b;
-      color: white;
-      border-radius: 23px;
-      padding: 25px;
-      margin-bottom: 28px;
-    }
-
-    .report-balance small {
-      opacity: .75;
-    }
-
-    .report-balance strong {
-      display: block;
-      font-size: 34px;
-      margin-top: 7px;
-    }
-
-    .report-heading {
-      font-size: 22px;
-      margin: 25px 0 12px;
-    }
-
-    /* =========================
-       MODAL
-       ========================= */
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.35);
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      z-index: 100;
-      padding: 15px;
-    }
-
-    .modal-box {
-      width: min(100%, 620px);
-      background: #faf9f5;
-      border-radius: 28px;
-      padding: 24px;
-    }
-
-    .modal-box h2 {
-      margin-top: 0;
-    }
-
-    .modal-box label {
-      display: block;
-      margin-top: 14px;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-
-    .modal-box input,
-    .modal-box select {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #ddd8ce;
-      border-radius: 14px;
-      background: white;
-      outline: none;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .modal-actions button {
-      flex: 1;
-      padding: 14px;
-      border-radius: 14px;
-      border: 0;
-      cursor: pointer;
-    }
-
-    .cancel {
-      background: #e9e4da;
-    }
-
-    .save {
-      background: #204c3b;
-      color: white;
-    }
-
-    /* =========================
-       TELEFON
-       ========================= */
-
-    @media (max-width: 480px) {
-      .screen {
-        padding: 18px 10px 35px;
-      }
-
-      .app-card {
-        padding: 18px;
-        border-radius: 25px;
-      }
-
-      .summary-grid {
-        gap: 10px;
-      }
-
-      .card {
-        padding: 15px;
-      }
-
-      .card strong {
-        font-size: 20px;
-      }
-
-      .balance strong,
-      .report-balance strong {
-        font-size: 30px;
-      }
-
-      .row {
-        gap: 12px;
-      }
-
-      .report-card .report-row {
-        padding: 18px;
-        gap: 12px;
-      }
-
-      .report-value {
-        min-width: 95px;
-        font-size: 16px;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta name="theme-color" content="#173b2b">
+
+<title>Duit Masuk</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  background:#eee8dd;
+  color:#17251f;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  min-height:100vh;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.screen{
+  min-height:100vh;
+  padding:18px 10px 35px;
+}
+
+.app-card{
+  width:min(100%,620px);
+  min-height:calc(100vh - 36px);
+  margin:0 auto;
+  padding:22px;
+  background:#faf9f5;
+  border-radius:30px;
+  box-shadow:0 8px 30px rgba(30,50,40,.08);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:45px;
+  margin-bottom:28px;
+}
+
+.hamb,
+.bell,
+.back,
+.plus{
+  border:0;
+  background:transparent;
+  color:#17251f;
+}
+
+.hamb{
+  font-size:29px;
+  line-height:1;
+  padding:4px;
+}
+
+.bell{
+  font-size:27px;
+}
+
+.back{
+  font-size:38px;
+  line-height:1;
+  padding:0 6px;
+}
+
+.plus{
+  font-size:42px;
+  line-height:1;
+}
+
+.page-title{
+  flex:1;
+  text-align:center;
+  font-size:28px;
+  font-weight:800;
+}
+
+/* =========================
+   WELCOME
+========================= */
+
+.welcome-art{
+  text-align:center;
+  padding:70px 12px 30px;
+}
+
+.logo{
+  width:76px;
+  height:76px;
+  margin:0 auto 30px;
+  border-radius:24px;
+  background:#204c3b;
+}
+
+.welcome-art h1{
+  font-size:34px;
+  line-height:1.15;
+  margin:0 0 16px;
+}
+
+.welcome-art p{
+  color:#747b76;
+  line-height:1.6;
+  margin-bottom:28px;
+}
+
+.primary,
+.linkbtn{
+  width:100%;
+  padding:16px;
+  border:0;
+  border-radius:16px;
+  margin-top:12px;
+}
+
+.primary{
+  background:#204c3b;
+  color:white;
+  font-weight:700;
+}
+
+.linkbtn{
+  background:#eee8dd;
+  color:#204c3b;
+  font-weight:700;
+}
+
+/* =========================
+   HOME
+========================= */
+
+.greeting h2{
+  font-size:28px;
+  margin:0 0 5px;
+}
+
+.greeting p{
+  color:#7a817c;
+  margin:0;
+}
+
+.summary-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:24px;
+}
+
+.card{
+  background:white;
+  border:1px solid #e8e4da;
+  border-radius:22px;
+  padding:18px;
+}
+
+.card small{
+  display:block;
+  color:#818983;
+  margin-bottom:8px;
+}
+
+.card strong{
+  display:block;
+  font-size:23px;
+}
+
+.card em{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  margin-top:10px;
+  margin-left:auto;
+  border-radius:50%;
+  font-style:normal;
+}
+
+.down{
+  background:#d9f1e1;
+  color:#28734d;
+}
+
+.up{
+  background:#f9dce0;
+  color:#c85e6b;
+}
+
+.balance{
+  margin-top:14px;
+  padding:24px;
+  background:#204c3b;
+  color:white;
+  border-radius:23px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.balance small{
+  display:block;
+  opacity:.75;
+  margin-bottom:6px;
+}
+
+.balance strong{
+  font-size:34px;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:28px 2px 12px;
+}
+
+.section-title b{
+  font-size:19px;
+}
+
+.section-title a{
+  color:#707a73;
+  cursor:pointer;
+}
+
+.list{
+  background:white;
+  border:1px solid #e7e3d9;
+  border-radius:22px;
+  overflow:hidden;
+}
+
+.row{
+  min-height:76px;
+  padding:15px 16px;
+  border-bottom:1px solid #eeeae2;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.row:last-child{
+  border-bottom:0;
+}
+
+.row-left{
+  flex:1;
+  min-width:0;
+}
+
+.row-left b{
+  display:block;
+  font-size:17px;
+  line-height:1.25;
+  overflow-wrap:anywhere;
+}
+
+.row-left small{
+  display:block;
+  color:#777e79;
+  margin-top:5px;
+}
+
+.amount{
+  flex-shrink:0;
+  white-space:nowrap;
+  font-weight:600;
+  text-align:right;
+}
+
+.dot{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.dot.green{
+  background:#d9f1e1;
+  color:#28734d;
+}
+
+.dot.pink{
+  background:#f9dce0;
+  color:#c85e6b;
+}
+
+/* =========================
+   PAGE
+========================= */
+
+.page-list{
+  margin-top:35px;
+}
+
+/* =========================
+   REPORT
+========================= */
+
+.report-box{
+  margin-top:28px;
+}
+
+.report-balance{
+  background:#204c3b;
+  color:white;
+  border-radius:23px;
+  padding:25px;
+  margin-bottom:28px;
+}
+
+.report-balance small{
+  opacity:.75;
+}
+
+.report-balance strong{
+  display:block;
+  font-size:34px;
+  margin-top:7px;
+}
+
+.report-heading{
+  font-size:22px;
+  margin:25px 0 12px;
+}
+
+.report-card{
+  background:white;
+  border:1px solid #e6e2d9;
+  border-radius:22px;
+  overflow:hidden;
+}
+
+.report-row{
+  min-height:82px;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  border-bottom:1px solid #eeeae2;
+}
+
+.report-row:last-child{
+  border-bottom:0;
+}
+
+.report-label{
+  flex:1;
+}
+
+.report-label b{
+  font-size:17px;
+  line-height:1.3;
+}
+
+.report-value{
+  flex-shrink:0;
+  min-width:95px;
+  text-align:right;
+  font-size:17px;
+  font-weight:600;
+  white-space:nowrap;
+}
+
+/* =========================
+   MENU
+========================= */
+
+.menu-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.35);
+  z-index:200;
+}
+
+.menu-panel{
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:min(82%,360px);
+  background:#faf9f5;
+  padding:25px 20px;
+  box-shadow:8px 0 30px rgba(0,0,0,.15);
+  animation:menuIn .2s ease;
+}
+
+@keyframes menuIn{
+  from{
+    transform:translateX(-100%);
+  }
+  to{
+    transform:translateX(0);
+  }
+}
+
+.menu-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:25px;
+}
+
+.menu-header h2{
+  margin:0;
+  font-size:25px;
+}
+
+.menu-close{
+  border:0;
+  background:transparent;
+  font-size:30px;
+}
+
+.menu-item{
+  width:100%;
+  border:0;
+  background:transparent;
+  text-align:left;
+  padding:16px 12px;
+  margin-bottom:5px;
+  border-radius:14px;
+  font-size:17px;
+  font-weight:600;
+  color:#17251f;
+}
+
+.menu-item:hover{
+  background:#eee8dd;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.38);
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:300;
+  padding:12px;
+}
+
+.modal-box{
+  width:min(100%,620px);
+  max-height:90vh;
+  overflow:auto;
+  background:#faf9f5;
+  border-radius:28px;
+  padding:24px;
+}
+
+.modal-box h2{
+  margin-top:0;
+}
+
+.modal-box label{
+  display:block;
+  margin-top:14px;
+  margin-bottom:6px;
+  font-weight:600;
+}
+
+.modal-box input,
+.modal-box select{
+  width:100%;
+  padding:14px;
+  border:1px solid #ddd8ce;
+  border-radius:14px;
+  background:white;
+  outline:none;
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.modal-actions button{
+  flex:1;
+  padding:14px;
+  border:0;
+  border-radius:14px;
+}
+
+.cancel{
+  background:#e9e4da;
+}
+
+.save{
+  background:#204c3b;
+  color:white;
+}
+
+/* =========================
+   EDIT BUTTON
+========================= */
+
+.action-buttons{
+  display:flex;
+  gap:6px;
+  margin-top:9px;
+}
+
+.action-buttons button{
+  border:0;
+  border-radius:9px;
+  padding:7px 10px;
+  font-size:12px;
+}
+
+.edit-btn{
+  background:#eee8dd;
+}
+
+.delete-btn{
+  background:#f9dce0;
+  color:#b94d5b;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:480px){
+
+  .app-card{
+    padding:18px;
+    border-radius:25px;
+  }
+
+  .welcome-art{
+    padding-top:50px;
+  }
+
+  .welcome-art h1{
+    font-size:30px;
+  }
+
+  .card{
+    padding:15px;
+  }
+
+  .card strong{
+    font-size:20px;
+  }
+
+  .balance strong,
+  .report-balance strong{
+    font-size:30px;
+  }
+
+  .row{
+    gap:10px;
+  }
+
+  .amount{
+    font-size:15px;
+  }
+
+  .page-title{
+    font-size:24px;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
 
 <div id="app">
 
-  <!-- =========================
-       WELCOME
-       ========================= -->
+<!-- =========================
+     WELCOME
+========================= -->
 
-  <section class="screen" id="welcome">
-    <div class="app-card">
+<section class="screen" id="welcome">
 
-      <div class="welcome-art">
-        <div class="logo"></div>
+  <div class="app-card">
 
-        <h1>
-          Duit Masuk,<br>
-          Hidup Teratur.
-        </h1>
+    <div class="welcome-art">
 
-        <p>
-          Catat pendapatan, kawal perbelanjaan
-          dan capai matlamat kewangan anda.
-        </p>
+      <div class="logo"></div>
 
-        <button class="primary" onclick="show('home')">
-          Mulakan
-        </button>
+      <h1>
+        Duit Masuk,<br>
+        Hidup Teratur.
+      </h1>
 
-        <button class="linkbtn" onclick="show('home')">
-          Log masuk
-        </button>
-      </div>
+      <p>
+        Catat pendapatan, kawal perbelanjaan
+        dan capai matlamat kewangan anda.
+      </p>
 
-    </div>
-  </section>
+      <button
+        class="primary"
+        onclick="show('home')">
+        Mulakan
+      </button>
 
-
-  <!-- =========================
-       HOME
-       ========================= -->
-
-  <section class="screen hidden" id="home">
-    <div class="app-card">
-
-      <header class="topbar">
-      <button class="hamb" onclick="openMenu()" aria-label="Buka menu">
-  ☰
-</button>
-        <div class="bell">♧</div>
-      </header>
-
-      <div class="greeting">
-        <h2>Hai! 👋</h2>
-        <p>Jom urus kewangan dengan lebih bijak.</p>
-      </div>
-
-      <div class="summary-grid">
-
-        <div class="card">
-          <small>Duit Masuk</small>
-          <strong id="incomeTotal">RM 0.00</strong>
-          <em class="down">↓</em>
-        </div>
-
-        <div class="card">
-          <small>Duit Keluar</small>
-          <strong id="expenseTotal">RM 0.00</strong>
-          <em class="up">↑</em>
-        </div>
-
-      </div>
-
-      <div class="balance">
-        <div>
-          <small>Baki Semasa</small>
-          <strong id="balance">RM 0.00</strong>
-        </div>
-        <span style="font-size:30px;">−</span>
-      </div>
-
-
-      <div class="section-title">
-        <b>Ringkasan Bulan Ini</b>
-        <a onclick="show('report')">Lihat semua</a>
-      </div>
-
-      <div class="list">
-
-        <div class="row">
-          <div class="row-left">
-            <b>↓ &nbsp; Pendapatan</b>
-          </div>
-          <span class="amount" id="incomeRow">RM 0.00</span>
-        </div>
-
-        <div class="row">
-          <div class="row-left">
-            <b>↗ &nbsp; Perbelanjaan</b>
-          </div>
-          <span class="amount" id="expenseRow">RM 0.00</span>
-        </div>
-
-        <div class="row">
-          <div class="row-left">
-            <b>▣ &nbsp; Simpanan</b>
-          </div>
-          <span class="amount">RM 0.00</span>
-        </div>
-
-      </div>
-
-
-      <div class="section-title">
-        <b>Transaksi Terbaru</b>
-        <a onclick="show('transactions')">Lihat semua</a>
-      </div>
-
-      <div class="list" id="recent"></div>
-
-
-      <div class="section-title">
-        <b>Item Beli</b>
-        <a onclick="show('items')">Lihat semua</a>
-      </div>
-
-      <div class="list" id="itemList"></div>
+      <button
+        class="linkbtn"
+        onclick="show('home')">
+        Log masuk
+      </button>
 
     </div>
-  </section>
+
+  </div>
+
+</section>
 
 
-  <!-- =========================
-       TRANSAKSI
-       ========================= -->
+<!-- =========================
+     HOME
+========================= -->
 
-  <section class="screen hidden" id="transactions">
-    <div class="app-card">
+<section class="screen hidden" id="home">
 
-      <header class="topbar">
-        <button class="back" onclick="show('home')">‹</button>
-        <div class="page-title">Transaksi</div>
-        <button class="plus" onclick="openAdd()">+</button>
-      </header>
+  <div class="app-card">
 
-      <div class="page-list">
-        <div class="list" id="transactionList"></div>
+    <header class="topbar">
+
+      <button
+        class="hamb"
+        onclick="openMenu()"
+        aria-label="Menu">
+        ☰
+      </button>
+
+      <div class="bell">
+        ♧
       </div>
 
+    </header>
+
+
+    <div class="greeting">
+
+      <h2>Hai! 👋</h2>
+
+      <p>
+        Jom urus kewangan dengan lebih bijak.
+      </p>
+
     </div>
-  </section>
 
 
-  <!-- =========================
-       ITEM BELI
-       ========================= -->
+    <div class="summary-grid">
 
-  <section class="screen hidden" id="items">
-    <div class="app-card">
+      <div class="card">
 
-      <header class="topbar">
-        <button class="back" onclick="show('home')">‹</button>
-        <div class="page-title">Item Beli</div>
-        <button class="plus" onclick="openAdd()">+</button>
-      </header>
+        <small>Duit Masuk</small>
 
-      <div class="page-list">
-        <div class="list" id="itemList"></div>
+        <strong id="incomeTotal">
+          RM 0.00
+        </strong>
+
+        <em class="down">
+          ↓
+        </em>
+
       </div>
 
-    </div>
-  </section>
 
+      <div class="card">
 
-  <!-- =========================
-       AKAUN
-       ========================= -->
+        <small>Duit Keluar</small>
 
-  <section class="screen hidden" id="account">
-    <div class="app-card">
+        <strong id="expenseTotal">
+          RM 0.00
+        </strong>
 
-      <header class="topbar">
-        <button class="back" onclick="show('home')">‹</button>
-        <div class="page-title">Akaun</div>
-        <button class="plus" onclick="openAccount()">+</button>
-      </header>
-
-      <div class="page-list">
-
-        <div class="report-card">
-
-          <div class="report-row">
-            <div class="report-label">
-              <b>Jumlah Akaun</b>
-            </div>
-
-            <div class="report-value" id="accountTotal">
-              RM 0.00
-            </div>
-          </div>
-
-          <div id="accountList"></div>
-
-        </div>
+        <em class="up">
+          ↑
+        </em>
 
       </div>
 
     </div>
-  </section>
 
 
-  <!-- =========================
-       LAPORAN
-       ========================= -->
+    <div class="balance">
 
-  <section class="screen hidden" id="report">
-    <div class="app-card">
+      <div>
 
-      <header class="topbar">
-        <button class="back" onclick="show('home')">‹</button>
+        <small>Baki Semasa</small>
 
-        <div class="page-title">
-          Laporan
+        <strong id="balance">
+          RM 0.00
+        </strong>
+
+      </div>
+
+      <span style="font-size:30px;">
+        −
+      </span>
+
+    </div>
+
+
+    <div class="section-title">
+
+      <b>
+        Ringkasan Bulan Ini
+      </b>
+
+      <a onclick="show('report')">
+        Laporan
+      </a>
+
+    </div>
+
+
+    <div class="list">
+
+      <div class="row">
+
+        <div class="row-left">
+          <b>↓ &nbsp; Pendapatan</b>
         </div>
 
-        <button
-          class="back"
-          onclick="show('home')"
-          style="font-size:28px;">
-          ⌂
-        </button>
-      </header>
+        <span
+          class="amount"
+          id="incomeRow">
+          RM 0.00
+        </span>
+
+      </div>
 
 
-      <div class="report-box">
+      <div class="row">
 
-        <div class="card" style="margin-bottom:18px;">
-          <small>Duit Masuk</small>
-          <strong id="reportIncome">RM 0.00</strong>
+        <div class="row-left">
+          <b>↗ &nbsp; Perbelanjaan</b>
         </div>
 
+        <span
+          class="amount"
+          id="expenseRow">
+          RM 0.00
+        </span>
 
-        <div class="card" style="margin-bottom:18px;">
-          <small>Duit Keluar</small>
-          <strong id="reportExpense">RM 0.00</strong>
+      </div>
+
+
+      <div class="row">
+
+        <div class="row-left">
+          <b>▣ &nbsp; Simpanan</b>
         </div>
 
-
-        <div class="report-balance">
-          <small>Baki</small>
-          <strong id="reportBalance">RM 0.00</strong>
-        </div>
-
-
-        <h2 class="report-heading">
-          Ringkasan
-        </h2>
-
-
-        <div class="report-card">
-
-          <div class="report-row">
-            <div class="report-label">
-              <b>Jumlah transaksi</b>
-            </div>
-
-            <div class="report-value" id="reportCount">
-              0
-            </div>
-          </div>
-
-
-          <div class="report-row">
-            <div class="report-label">
-              <b>Purata perbelanjaan</b>
-            </div>
-
-            <div class="report-value" id="reportAverage">
-              RM 0.00
-            </div>
-          </div>
-
-        </div>
+        <span
+          class="amount"
+          id="savingRow">
+          RM 0.00
+        </span>
 
       </div>
 
     </div>
-  </section>
 
 
-  <!-- =========================
-       MODAL TRANSAKSI
-       ========================= -->
+    <div class="section-title">
 
-  <div
-    id="txModal"
-    class="modal hidden">
+      <b>
+        Transaksi Terbaru
+      </b>
 
-    <div class="modal-box">
+      <a onclick="show('transactions')">
+        Lihat semua
+      </a>
 
-      <h2>Tambah Transaksi</h2>
-
-      <label>Jenis</label>
-
-      <select id="type">
-        <option value="income">Duit Masuk</option>
-        <option value="expense">Duit Keluar</option>
-      </select>
+    </div>
 
 
-      <label>Nama</label>
-
-      <input
-        id="name"
-        type="text"
-        placeholder="Contoh: Gaji">
+    <div
+      class="list"
+      id="recentList">
+    </div>
 
 
-      <label>Jumlah</label>
+    <div class="section-title">
 
-      <input
-        id="amount"
-        type="number"
-        inputmode="decimal"
-        placeholder="0.00">
+      <b>
+        Item Beli
+      </b>
 
+      <a onclick="show('items')">
+        Lihat semua
+      </a>
 
-      <label>Kategori</label>
-
-      <input
-        id="category"
-        type="text"
-        placeholder="Contoh: Barang">
+    </div>
 
 
-      <div class="modal-actions">
+    <div
+      class="list"
+      id="homeItemList">
+    </div>
 
-        <button
-          class="cancel"
-          onclick="closeModal()">
-          Batal
-        </button>
+  </div>
 
-        <button
-          class="save"
-          onclick="saveTx()">
-          Simpan
-        </button>
+</section>
+
+
+<!-- =========================
+     TRANSAKSI
+========================= -->
+
+<section
+  class="screen hidden"
+  id="transactions">
+
+  <div class="app-card">
+
+    <header class="topbar">
+
+      <button
+        class="back"
+        onclick="show('home')">
+        ‹
+      </button>
+
+      <div class="page-title">
+        Transaksi
+      </div>
+
+      <button
+        class="plus"
+        onclick="openAdd()">
+        +
+      </button>
+
+    </header>
+
+
+    <div class="page-list">
+
+      <div
+        class="list"
+        id="transactionList">
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     ITEM BELI
+========================= -->
+
+<section
+  class="screen hidden"
+  id="items">
+
+  <div class="app-card">
+
+    <header class="topbar">
+
+      <button
+        class="back"
+        onclick="show('home')">
+        ‹
+      </button>
+
+      <div class="page-title">
+        Item Beli
+      </div>
+
+      <button
+        class="plus"
+        onclick="openAddExpense()">
+        +
+      </button>
+
+    </header>
+
+
+    <div class="page-list">
+
+      <div
+        class="list"
+        id="itemPageList">
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     AKAUN
+========================= -->
+
+<section
+  class="screen hidden"
+  id="account">
+
+  <div class="app-card">
+
+    <header class="topbar">
+
+      <button
+        class="back"
+        onclick="show('home')">
+        ‹
+      </button>
+
+      <div class="page-title">
+        Akaun
+      </div>
+
+      <button
+        class="plus"
+        onclick="openAccount()">
+        +
+      </button>
+
+    </header>
+
+
+    <div class="page-list">
+
+      <div class="report-card">
+
+        <div class="report-row">
+
+          <div class="report-label">
+            <b>
+              Jumlah Akaun
+            </b>
+          </div>
+
+          <div
+            class="report-value"
+            id="accountTotal">
+            RM 0.00
+          </div>
+
+        </div>
+
+
+        <div id="accountList">
+        </div>
 
       </div>
 
@@ -846,51 +995,285 @@
 
   </div>
 
-
-  <!-- =========================
-       MODAL AKAUN
-       ========================= -->
-
-  <div
-    id="accountModal"
-    class="modal hidden">
-
-    <div class="modal-box">
-
-      <h2>Tambah Akaun</h2>
-
-      <label>Nama akaun</label>
-
-      <input
-        id="accName"
-        type="text"
-        placeholder="Contoh: Bank">
+</section>
 
 
-      <label>Baki</label>
+<!-- =========================
+     LAPORAN
+========================= -->
 
-      <input
-        id="accAmount"
-        type="number"
-        inputmode="decimal"
-        placeholder="0.00">
+<section
+  class="screen hidden"
+  id="report">
+
+  <div class="app-card">
+
+    <header class="topbar">
+
+      <button
+        class="back"
+        onclick="show('home')">
+        ‹
+      </button>
+
+      <div class="page-title">
+        Laporan
+      </div>
+
+      <button
+        class="back"
+        onclick="show('home')"
+        style="font-size:28px;">
+        ⌂
+      </button>
+
+    </header>
 
 
-      <div class="modal-actions">
+    <div class="report-box">
 
-        <button
-          class="cancel"
-          onclick="closeAccount()">
-          Batal
-        </button>
+      <div
+        class="card"
+        style="margin-bottom:18px;">
 
-        <button
-          class="save"
-          onclick="saveAccount()">
-          Simpan
-        </button>
+        <small>
+          Duit Masuk
+        </small>
+
+        <strong id="reportIncome">
+          RM 0.00
+        </strong>
 
       </div>
+
+
+      <div
+        class="card"
+        style="margin-bottom:18px;">
+
+        <small>
+          Duit Keluar
+        </small>
+
+        <strong id="reportExpense">
+          RM 0.00
+        </strong>
+
+      </div>
+
+
+      <div class="report-balance">
+
+        <small>
+          Baki
+        </small>
+
+        <strong id="reportBalance">
+          RM 0.00
+        </strong>
+
+      </div>
+
+
+      <h2 class="report-heading">
+        Ringkasan
+      </h2>
+
+
+      <div class="report-card">
+
+        <div class="report-row">
+
+          <div class="report-label">
+            <b>
+              Jumlah transaksi
+            </b>
+          </div>
+
+          <div
+            class="report-value"
+            id="reportCount">
+            0
+          </div>
+
+        </div>
+
+
+        <div class="report-row">
+
+          <div class="report-label">
+            <b>
+              Purata perbelanjaan
+            </b>
+          </div>
+
+          <div
+            class="report-value"
+            id="reportAverage">
+            RM 0.00
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     MENU
+========================= -->
+
+<div
+  id="menuOverlay"
+  class="menu-overlay hidden"
+  onclick="closeMenu(event)">
+
+  <div
+    class="menu-panel"
+    onclick="event.stopPropagation()">
+
+    <div class="menu-header">
+
+      <h2>
+        Menu
+      </h2>
+
+      <button
+        class="menu-close"
+        onclick="closeMenu()">
+        ×
+      </button>
+
+    </div>
+
+
+    <button
+      class="menu-item"
+      onclick="menuGo('home')">
+      🏠 &nbsp; Utama
+    </button>
+
+
+    <button
+      class="menu-item"
+      onclick="menuGo('transactions')">
+      💰 &nbsp; Transaksi
+    </button>
+
+
+    <button
+      class="menu-item"
+      onclick="menuGo('items')">
+      🛒 &nbsp; Item Beli
+    </button>
+
+
+    <button
+      class="menu-item"
+      onclick="menuGo('account')">
+      🏦 &nbsp; Akaun
+    </button>
+
+
+    <button
+      class="menu-item"
+      onclick="menuGo('report')">
+      📊 &nbsp; Laporan
+    </button>
+
+
+    <button
+      class="menu-item"
+      onclick="openAddFromMenu()">
+      ＋ &nbsp; Tambah Transaksi
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     MODAL TRANSAKSI
+========================= -->
+
+<div
+  id="txModal"
+  class="modal hidden">
+
+  <div class="modal-box">
+
+    <h2 id="txModalTitle">
+      Tambah Transaksi
+    </h2>
+
+
+    <label>
+      Jenis
+    </label>
+
+    <select id="type">
+
+      <option value="income">
+        Duit Masuk
+      </option>
+
+      <option value="expense">
+        Duit Keluar
+      </option>
+
+    </select>
+
+
+    <label>
+      Nama
+    </label>
+
+    <input
+      id="name"
+      type="text"
+      placeholder="Contoh: Gaji">
+
+
+    <label>
+      Jumlah
+    </label>
+
+    <input
+      id="amount"
+      type="number"
+      inputmode="decimal"
+      placeholder="0.00">
+
+
+    <label>
+      Kategori
+    </label>
+
+    <input
+      id="category"
+      type="text"
+      placeholder="Contoh: Barang">
+
+
+    <div class="modal-actions">
+
+      <button
+        class="cancel"
+        onclick="closeModal()">
+        Batal
+      </button>
+
+      <button
+        class="save"
+        onclick="saveTx()">
+        Simpan
+      </button>
 
     </div>
 
@@ -899,100 +1282,1193 @@
 </div>
 
 
-<script src="app.js"></script>
+<!-- =========================
+     MODAL AKAUN
+========================= -->
+
+<div
+  id="accountModal"
+  class="modal hidden">
+
+  <div class="modal-box">
+
+    <h2>
+      Tambah Akaun
+    </h2>
+
+
+    <label>
+      Nama akaun
+    </label>
+
+    <input
+      id="accName"
+      type="text"
+      placeholder="Contoh: Bank">
+
+
+    <label>
+      Baki
+    </label>
+
+    <input
+      id="accAmount"
+      type="number"
+      inputmode="decimal"
+      placeholder="0.00">
+
+
+    <div class="modal-actions">
+
+      <button
+        class="cancel"
+        onclick="closeAccount()">
+        Batal
+      </button>
+
+      <button
+        class="save"
+        onclick="saveAccount()">
+        Simpan
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+</div>
+
 
 <script>
+
 /* ==========================================
-   TAMBAHAN UNTUK LAPORAN
-   ========================================== */
+   DATA
+========================================== */
 
-function updateReportPage() {
+const KEY_TX =
+  "duitMasuk_transactions";
 
-  if (typeof transactions === "undefined") {
-    return;
-  }
-
-  const income = transactions
-    .filter(t => t.type === "income")
-    .reduce((sum, t) => sum + Number(t.amount || 0), 0);
-
-  const expense = transactions
-    .filter(t => t.type === "expense")
-    .reduce((sum, t) => sum + Number(t.amount || 0), 0);
-
-  const balance = income - expense;
-
-  const count = transactions.length;
-
-  const average =
-    expense > 0 &&
-    transactions.filter(t => t.type === "expense").length > 0
-      ? expense /
-        transactions.filter(t => t.type === "expense").length
-      : 0;
+const KEY_ACCOUNTS =
+  "duitMasuk_accounts";
 
 
-  const incomeEl =
-    document.getElementById("reportIncome");
+let transactions =
+  JSON.parse(
+    localStorage.getItem(KEY_TX) || "[]"
+  );
 
-  const expenseEl =
-    document.getElementById("reportExpense");
-
-  const balanceEl =
-    document.getElementById("reportBalance");
-
-  const countEl =
-    document.getElementById("reportCount");
-
-  const averageEl =
-    document.getElementById("reportAverage");
+let accounts =
+  JSON.parse(
+    localStorage.getItem(KEY_ACCOUNTS) || "[]"
+  );
 
 
-  if (incomeEl) {
-    incomeEl.textContent =
-      "RM " + income.toFixed(2);
-  }
+let editId = null;
 
-  if (expenseEl) {
-    expenseEl.textContent =
-      "RM " + expense.toFixed(2);
-  }
 
-  if (balanceEl) {
-    balanceEl.textContent =
-      "RM " + balance.toFixed(2);
-  }
+/* ==========================================
+   FORMAT DUIT
+========================================== */
 
-  if (countEl) {
-    countEl.textContent = count;
-  }
+function money(value){
 
-  if (averageEl) {
-    averageEl.textContent =
-      "RM " + average.toFixed(2);
-  }
+  return "RM " +
+    Number(value || 0).toFixed(2);
+
 }
 
 
-/* Pastikan laporan dikemas kini apabila dibuka */
+/* ==========================================
+   ESCAPE HTML
+========================================== */
 
-const oldShow = window.show;
+function escapeHtml(value){
 
-window.show = function(id) {
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
-  if (typeof oldShow === "function") {
-    oldShow(id);
+}
+
+
+/* ==========================================
+   NAVIGASI
+========================================== */
+
+function show(id){
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(el =>
+      el.classList.add("hidden")
+    );
+
+  const screen =
+    document.getElementById(id);
+
+  if(screen){
+    screen.classList.remove("hidden");
   }
 
-  if (id === "report") {
-    setTimeout(updateReportPage, 50);
+  closeMenu();
+
+  renderAll();
+
+}
+
+
+/* ==========================================
+   MENU
+========================================== */
+
+function openMenu(){
+
+  const menu =
+    document.getElementById("menuOverlay");
+
+  menu.classList.remove("hidden");
+
+}
+
+
+function closeMenu(event){
+
+  if(
+    event &&
+    event.target !==
+    document.getElementById("menuOverlay")
+  ){
+    return;
   }
-};
+
+  document
+    .getElementById("menuOverlay")
+    .classList.add("hidden");
+
+}
 
 
-/* Jalankan sekali */
+function menuGo(id){
 
-setTimeout(updateReportPage, 100);
+  closeMenu();
+
+  show(id);
+
+}
+
+
+function openAddFromMenu(){
+
+  closeMenu();
+
+  show("home");
+
+  setTimeout(
+    openAdd,
+    100
+  );
+
+}
+
+
+/* ==========================================
+   MODAL TRANSAKSI
+========================================== */
+
+function openAdd(){
+
+  editId = null;
+
+  document
+    .getElementById("txModalTitle")
+    .textContent =
+    "Tambah Transaksi";
+
+  document
+    .getElementById("type")
+    .value =
+    "income";
+
+  document
+    .getElementById("name")
+    .value = "";
+
+  document
+    .getElementById("amount")
+    .value = "";
+
+  document
+    .getElementById("category")
+    .value = "";
+
+  document
+    .getElementById("txModal")
+    .classList.remove("hidden");
+
+}
+
+
+function openAddExpense(){
+
+  openAdd();
+
+  document
+    .getElementById("type")
+    .value =
+    "expense";
+
+}
+
+
+function closeModal(){
+
+  document
+    .getElementById("txModal")
+    .classList.add("hidden");
+
+  editId = null;
+
+}
+
+
+/* ==========================================
+   SIMPAN TRANSAKSI
+========================================== */
+
+function saveTx(){
+
+  const type =
+    document
+      .getElementById("type")
+      .value;
+
+  const name =
+    document
+      .getElementById("name")
+      .value
+      .trim();
+
+  const amount =
+    Number(
+      document
+        .getElementById("amount")
+        .value
+    );
+
+  const category =
+    document
+      .getElementById("category")
+      .value
+      .trim();
+
+
+  if(!name){
+
+    alert(
+      "Sila masukkan nama transaksi."
+    );
+
+    return;
+
+  }
+
+
+  if(!amount || amount <= 0){
+
+    alert(
+      "Sila masukkan jumlah yang sah."
+    );
+
+    return;
+
+  }
+
+
+  if(editId){
+
+    const tx =
+      transactions.find(
+        t => t.id === editId
+      );
+
+    if(tx){
+
+      tx.type = type;
+      tx.name = name;
+      tx.amount = amount;
+      tx.category =
+        category || "Umum";
+      tx.date =
+        new Date().toISOString();
+
+    }
+
+  }else{
+
+    transactions.unshift({
+
+      id:
+        Date.now().toString(),
+
+      type,
+
+      name,
+
+      amount,
+
+      category:
+        category || "Umum",
+
+      date:
+        new Date().toISOString()
+
+    });
+
+  }
+
+
+  localStorage.setItem(
+    KEY_TX,
+    JSON.stringify(transactions)
+  );
+
+
+  closeModal();
+
+  renderAll();
+
+}
+
+
+/* ==========================================
+   EDIT TRANSAKSI
+========================================== */
+
+function editTransaction(id){
+
+  const tx =
+    transactions.find(
+      t => t.id === id
+    );
+
+  if(!tx){
+    return;
+  }
+
+
+  editId = id;
+
+
+  document
+    .getElementById("txModalTitle")
+    .textContent =
+    "Edit Transaksi";
+
+
+  document
+    .getElementById("type")
+    .value =
+    tx.type;
+
+
+  document
+    .getElementById("name")
+    .value =
+    tx.name;
+
+
+  document
+    .getElementById("amount")
+    .value =
+    tx.amount;
+
+
+  document
+    .getElementById("category")
+    .value =
+    tx.category || "";
+
+
+  document
+    .getElementById("txModal")
+    .classList.remove("hidden");
+
+}
+
+
+/* ==========================================
+   HAPUS TRANSAKSI
+========================================== */
+
+function deleteTransaction(id){
+
+  const tx =
+    transactions.find(
+      t => t.id === id
+    );
+
+  if(!tx){
+    return;
+  }
+
+
+  const confirmDelete =
+    confirm(
+      "Hapus transaksi \"" +
+      tx.name +
+      "\"?"
+    );
+
+
+  if(!confirmDelete){
+    return;
+  }
+
+
+  transactions =
+    transactions.filter(
+      t => t.id !== id
+    );
+
+
+  localStorage.setItem(
+    KEY_TX,
+    JSON.stringify(transactions)
+  );
+
+
+  renderAll();
+
+}
+
+
+/* ==========================================
+   AKAUN
+========================================== */
+
+function openAccount(){
+
+  document
+    .getElementById("accName")
+    .value = "";
+
+  document
+    .getElementById("accAmount")
+    .value = "";
+
+  document
+    .getElementById("accountModal")
+    .classList.remove("hidden");
+
+}
+
+
+function closeAccount(){
+
+  document
+    .getElementById("accountModal")
+    .classList.add("hidden");
+
+}
+
+
+function saveAccount(){
+
+  const name =
+    document
+      .getElementById("accName")
+      .value
+      .trim();
+
+  const amount =
+    Number(
+      document
+        .getElementById("accAmount")
+        .value
+    );
+
+
+  if(!name){
+
+    alert(
+      "Sila masukkan nama akaun."
+    );
+
+    return;
+
+  }
+
+
+  if(amount < 0 || isNaN(amount)){
+
+    alert(
+      "Sila masukkan baki yang sah."
+    );
+
+    return;
+
+  }
+
+
+  accounts.unshift({
+
+    id:
+      Date.now().toString(),
+
+    name,
+
+    amount
+
+  });
+
+
+  localStorage.setItem(
+    KEY_ACCOUNTS,
+    JSON.stringify(accounts)
+  );
+
+
+  closeAccount();
+
+  renderAll();
+
+}
+
+
+/* ==========================================
+   KIRAAN
+========================================== */
+
+function getTotals(){
+
+  let income = 0;
+
+  let expense = 0;
+
+
+  transactions.forEach(t => {
+
+    if(t.type === "income"){
+
+      income +=
+        Number(t.amount || 0);
+
+    }else{
+
+      expense +=
+        Number(t.amount || 0);
+
+    }
+
+  });
+
+
+  return {
+
+    income,
+
+    expense,
+
+    balance:
+      income - expense
+
+  };
+
+}
+
+
+/* ==========================================
+   HOME
+========================================== */
+
+function renderHome(){
+
+  const totals =
+    getTotals();
+
+
+  const incomeEl =
+    document.getElementById(
+      "incomeTotal"
+    );
+
+  const expenseEl =
+    document.getElementById(
+      "expenseTotal"
+    );
+
+  const balanceEl =
+    document.getElementById(
+      "balance"
+    );
+
+
+  if(incomeEl)
+    incomeEl.textContent =
+      money(totals.income);
+
+
+  if(expenseEl)
+    expenseEl.textContent =
+      money(totals.expense);
+
+
+  if(balanceEl)
+    balanceEl.textContent =
+      money(totals.balance);
+
+
+  const incomeRow =
+    document.getElementById(
+      "incomeRow"
+    );
+
+  const expenseRow =
+    document.getElementById(
+      "expenseRow"
+    );
+
+
+  if(incomeRow)
+    incomeRow.textContent =
+      money(totals.income);
+
+
+  if(expenseRow)
+    expenseRow.textContent =
+      money(totals.expense);
+
+
+  renderRecent();
+
+  renderHomeItems();
+
+}
+
+
+/* ==========================================
+   TRANSAKSI TERKINI
+========================================== */
+
+function transactionHtml(t){
+
+  const isIncome =
+    t.type === "income";
+
+
+  const sign =
+    isIncome ? "+" : "-";
+
+
+  const dotClass =
+    isIncome
+      ? "green"
+      : "pink";
+
+
+  return `
+
+    <div class="row">
+
+      <div
+        class="dot ${dotClass}">
+        ${isIncome ? "↓" : "↑"}
+      </div>
+
+
+      <div class="row-left">
+
+        <b>
+          ${escapeHtml(t.name)}
+        </b>
+
+        <small>
+          ${escapeHtml(
+            t.category || "Umum"
+          )}
+        </small>
+
+
+        <div class="action-buttons">
+
+          <button
+            class="edit-btn"
+            onclick="editTransaction('${t.id}')">
+            Edit
+          </button>
+
+          <button
+            class="delete-btn"
+            onclick="deleteTransaction('${t.id}')">
+            Hapus
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <span class="amount">
+
+        ${sign}
+        ${money(t.amount)}
+
+      </span>
+
+    </div>
+
+  `;
+
+}
+
+
+function renderRecent(){
+
+  const list =
+    document.getElementById(
+      "recentList"
+    );
+
+
+  if(!list){
+    return;
+  }
+
+
+  const recent =
+    transactions.slice(0,5);
+
+
+  if(recent.length === 0){
+
+    list.innerHTML = `
+
+      <div class="row">
+
+        <div class="row-left">
+
+          <b>
+            Belum ada transaksi
+          </b>
+
+          <small>
+            Tekan + untuk tambah transaksi
+          </small>
+
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    recent
+      .map(transactionHtml)
+      .join("");
+
+}
+
+
+/* ==========================================
+   SEMUA TRANSAKSI
+========================================== */
+
+function renderTransactions(){
+
+  const list =
+    document.getElementById(
+      "transactionList"
+    );
+
+
+  if(!list){
+    return;
+  }
+
+
+  if(transactions.length === 0){
+
+    list.innerHTML = `
+
+      <div class="row">
+
+        <div class="row-left">
+
+          <b>
+            Belum ada transaksi
+          </b>
+
+          <small>
+            Tekan + untuk tambah
+          </small>
+
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    transactions
+      .map(transactionHtml)
+      .join("");
+
+}
+
+
+/* ==========================================
+   ITEM BELI
+========================================== */
+
+function renderHomeItems(){
+
+  const list =
+    document.getElementById(
+      "homeItemList"
+    );
+
+
+  if(!list){
+    return;
+  }
+
+
+  const expenses =
+    transactions
+      .filter(
+        t => t.type === "expense"
+      )
+      .slice(0,5);
+
+
+  if(expenses.length === 0){
+
+    list.innerHTML = `
+
+      <div class="row">
+
+        <div class="row-left">
+
+          <b>
+            Belum ada item beli
+          </b>
+
+          <small>
+            Item perbelanjaan akan muncul di sini
+          </small>
+
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    expenses
+      .map(transactionHtml)
+      .join("");
+
+}
+
+
+function renderItems(){
+
+  const list =
+    document.getElementById(
+      "itemPageList"
+    );
+
+
+  if(!list){
+    return;
+  }
+
+
+  const expenses =
+    transactions.filter(
+      t => t.type === "expense"
+    );
+
+
+  if(expenses.length === 0){
+
+    list.innerHTML = `
+
+      <div class="row">
+
+        <div class="row-left">
+
+          <b>
+            Belum ada item beli
+          </b>
+
+          <small>
+            Tekan + untuk tambah
+          </small>
+
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    expenses
+      .map(transactionHtml)
+      .join("");
+
+}
+
+
+/* ==========================================
+   AKAUN
+========================================== */
+
+function renderAccounts(){
+
+  const list =
+    document.getElementById(
+      "accountList"
+    );
+
+  const total =
+    document.getElementById(
+      "accountTotal"
+    );
+
+
+  if(!list){
+    return;
+  }
+
+
+  const sum =
+    accounts.reduce(
+      (s,a) =>
+        s + Number(a.amount || 0),
+      0
+    );
+
+
+  if(total){
+
+    total.textContent =
+      money(sum);
+
+  }
+
+
+  if(accounts.length === 0){
+
+    list.innerHTML = `
+
+      <div class="row">
+
+        <div class="row-left">
+
+          <b>
+            Belum ada akaun
+          </b>
+
+          <small>
+            Tekan + untuk tambah akaun
+          </small>
+
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    accounts.map(a => `
+
+      <div class="report-row">
+
+        <div class="report-label">
+
+          <b>
+            ${escapeHtml(a.name)}
+          </b>
+
+        </div>
+
+        <div class="report-value">
+
+          ${money(a.amount)}
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/* ==========================================
+   LAPORAN
+========================================== */
+
+function updateReportPage(){
+
+  const totals =
+    getTotals();
+
+
+  const incomeEl =
+    document.getElementById(
+      "reportIncome"
+    );
+
+  const expenseEl =
+    document.getElementById(
+      "reportExpense"
+    );
+
+  const balanceEl =
+    document.getElementById(
+      "reportBalance"
+    );
+
+  const countEl =
+    document.getElementById(
+      "reportCount"
+    );
+
+  const averageEl =
+    document.getElementById(
+      "reportAverage"
+    );
+
+
+  if(incomeEl)
+    incomeEl.textContent =
+      money(totals.income);
+
+
+  if(expenseEl)
+    expenseEl.textContent =
+      money(totals.expense);
+
+
+  if(balanceEl)
+    balanceEl.textContent =
+      money(totals.balance);
+
+
+  if(countEl)
+    countEl.textContent =
+      transactions.length;
+
+
+  const expenses =
+    transactions.filter(
+      t => t.type === "expense"
+    );
+
+
+  const average =
+    expenses.length
+      ? totals.expense / expenses.length
+      : 0;
+
+
+  if(averageEl)
+    averageEl.textContent =
+      money(average);
+
+}
+
+
+/* ==========================================
+   RENDER SEMUA
+========================================== */
+
+function renderAll(){
+
+  renderHome();
+
+  renderTransactions();
+
+  renderItems();
+
+  renderAccounts();
+
+  updateReportPage();
+
+}
+
+
+/* ==========================================
+   TUTUP MODAL BILA TEKAN LUAR
+========================================== */
+
+document
+  .getElementById("txModal")
+  .addEventListener(
+    "click",
+    function(e){
+
+      if(e.target === this){
+        closeModal();
+      }
+
+    }
+  );
+
+
+document
+  .getElementById("accountModal")
+  .addEventListener(
+    "click",
+    function(e){
+
+      if(e.target === this){
+        closeAccount();
+      }
+
+    }
+  );
+
+
+/* ==========================================
+   MULA
+========================================== */
+
+renderAll();
+
 </script>
 
 </body>
