@@ -1,813 +1,896 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#173b2b">
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css">
-<title>Duit Masuk</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#173b2b">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <title>Duit Masuk</title>
+
+  <style>
+    /* =========================
+       ASAS
+       ========================= */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #eee8dd;
+      color: #17251f;
+      font-family: Arial, sans-serif;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .screen {
+      min-height: 100vh;
+      padding: 24px 18px 50px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .app-card {
+      width: min(100%, 620px);
+      margin: 0 auto;
+      background: #faf9f5;
+      border-radius: 30px;
+      min-height: calc(100vh - 48px);
+      padding: 24px;
+    }
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .hamb,
+    .bell {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .back {
+      border: 0;
+      background: transparent;
+      font-size: 34px;
+      cursor: pointer;
+      padding: 0 8px;
+    }
+
+    .page-title {
+      font-size: 30px;
+      font-weight: 800;
+      text-align: center;
+      flex: 1;
+    }
+
+    .plus {
+      border: 0;
+      background: transparent;
+      font-size: 42px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    /* =========================
+       WELCOME
+       ========================= */
+
+    .welcome-art {
+      text-align: center;
+      padding: 35px 10px;
+    }
+
+    .logo {
+      width: 70px;
+      height: 70px;
+      border-radius: 22px;
+      background: #1e4a39;
+      margin: 0 auto 30px;
+    }
+
+    .welcome-art h1 {
+      font-size: 34px;
+      margin-bottom: 15px;
+    }
+
+    .welcome-art p {
+      color: #747b76;
+      line-height: 1.6;
+    }
+
+    .primary,
+    .linkbtn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 16px;
+      border: 0;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #1e4a39;
+      color: white;
+      font-weight: 700;
+    }
+
+    .linkbtn {
+      background: #eee8dd;
+      color: #1e4a39;
+      font-weight: 700;
+    }
+
+    /* =========================
+       HOME
+       ========================= */
+
+    .greeting h2 {
+      font-size: 26px;
+      margin: 0 0 5px;
+    }
+
+    .greeting p {
+      color: #7a817c;
+      margin-top: 0;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e8e4da;
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .card small {
+      display: block;
+      color: #818983;
+      margin-bottom: 8px;
+    }
+
+    .card strong {
+      display: block;
+      font-size: 23px;
+    }
+
+    .card em {
+      display: block;
+      margin-top: 12px;
+      font-style: normal;
+      text-align: right;
+      font-size: 22px;
+    }
+
+    .down {
+      color: #32815d;
+    }
+
+    .up {
+      color: #d56e79;
+    }
+
+    .balance {
+      margin-top: 14px;
+      background: #204c3b;
+      color: white;
+      border-radius: 23px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .balance small {
+      display: block;
+      opacity: .75;
+      margin-bottom: 6px;
+    }
+
+    .balance strong {
+      font-size: 34px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 28px 2px 12px;
+    }
+
+    .section-title b {
+      font-size: 20px;
+    }
+
+    .section-title a {
+      color: #707a73;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .list {
+      background: white;
+      border: 1px solid #e7e3d9;
+      border-radius: 22px;
+      overflow: hidden;
+    }
+
+    .row {
+      min-height: 76px;
+      padding: 16px 18px;
+      border-bottom: 1px solid #eeeae2;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+    }
+
+    .row-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .row-left b {
+      display: block;
+      font-size: 17px;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .row-left small {
+      display: block;
+      color: #777e79;
+      margin-top: 5px;
+    }
+
+    .amount {
+      flex-shrink: 0;
+      white-space: nowrap;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .dot {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .dot.green {
+      background: #d9f1e1;
+      color: #28734d;
+    }
+
+    .dot.pink {
+      background: #f9dce0;
+      color: #c85e6b;
+    }
+
+    /* =========================
+       PAGE ITEM / AKAUN
+       ========================= */
+
+    .page-list {
+      margin-top: 40px;
+    }
+
+    /* =========================
+       LAPORAN
+       ========================= */
+
+    .report-box {
+      margin-top: 28px;
+    }
+
+    .report-card {
+      background: white;
+      border: 1px solid #e6e2d9;
+      border-radius: 22px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .report-card .report-row {
+      min-height: 82px;
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 1px solid #eeeae2;
+    }
+
+    .report-card .report-row:last-child {
+      border-bottom: 0;
+    }
+
+    .report-label {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .report-label b {
+      display: block;
+      font-size: 17px;
+      line-height: 1.3;
+    }
+
+    .report-value {
+      flex-shrink: 0;
+      min-width: 110px;
+      text-align: right;
+      font-size: 17px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .report-balance {
+      background: #204c3b;
+      color: white;
+      border-radius: 23px;
+      padding: 25px;
+      margin-bottom: 28px;
+    }
+
+    .report-balance small {
+      opacity: .75;
+    }
+
+    .report-balance strong {
+      display: block;
+      font-size: 34px;
+      margin-top: 7px;
+    }
+
+    .report-heading {
+      font-size: 22px;
+      margin: 25px 0 12px;
+    }
+
+    /* =========================
+       MODAL
+       ========================= */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 100;
+      padding: 15px;
+    }
+
+    .modal-box {
+      width: min(100%, 620px);
+      background: #faf9f5;
+      border-radius: 28px;
+      padding: 24px;
+    }
+
+    .modal-box h2 {
+      margin-top: 0;
+    }
+
+    .modal-box label {
+      display: block;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .modal-box input,
+    .modal-box select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd8ce;
+      border-radius: 14px;
+      background: white;
+      outline: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 14px;
+      border-radius: 14px;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .cancel {
+      background: #e9e4da;
+    }
+
+    .save {
+      background: #204c3b;
+      color: white;
+    }
+
+    /* =========================
+       TELEFON
+       ========================= */
+
+    @media (max-width: 480px) {
+      .screen {
+        padding: 18px 10px 35px;
+      }
+
+      .app-card {
+        padding: 18px;
+        border-radius: 25px;
+      }
+
+      .summary-grid {
+        gap: 10px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      .card strong {
+        font-size: 20px;
+      }
+
+      .balance strong,
+      .report-balance strong {
+        font-size: 30px;
+      }
+
+      .row {
+        gap: 12px;
+      }
+
+      .report-card .report-row {
+        padding: 18px;
+        gap: 12px;
+      }
+
+      .report-value {
+        min-width: 95px;
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <div id="app">
 
-  <!-- ================= HOME ================= -->
+  <!-- =========================
+       WELCOME
+       ========================= -->
 
   <section class="screen" id="welcome">
+    <div class="app-card">
 
-    <div class="welcome-art">
-      <div class="logo">↗</div>
-      <span>+</span>
-      <i></i>
+      <div class="welcome-art">
+        <div class="logo"></div>
+
+        <h1>
+          Duit Masuk,<br>
+          Hidup Teratur.
+        </h1>
+
+        <p>
+          Catat pendapatan, kawal perbelanjaan
+          dan capai matlamat kewangan anda.
+        </p>
+
+        <button class="primary" onclick="show('home')">
+          Mulakan
+        </button>
+
+        <button class="linkbtn" onclick="show('home')">
+          Log masuk
+        </button>
+      </div>
+
     </div>
-
-    <div class="welcome-copy">
-
-      <h1>
-        Duit Masuk,<br>
-        Hidup Teratur.
-      </h1>
-
-      <p>
-        Catat pendapatan, kawal perbelanjaan
-        dan capai matlamat kewangan anda.
-      </p>
-
-    </div>
-
-    <button
-      class="primary"
-      onclick="show('home')"
-    >
-      Mulakan
-    </button>
-
-    <button
-      class="linkbtn"
-      onclick="show('home')"
-    >
-      Log masuk
-    </button>
-
   </section>
 
 
-  <!-- ================= HOME PAGE ================= -->
+  <!-- =========================
+       HOME
+       ========================= -->
 
-  <section
-    class="screen hidden"
-    id="home"
-  >
+  <section class="screen hidden" id="home">
+    <div class="app-card">
 
-    <header class="topbar">
+      <header class="topbar">
+        <div class="hamb">☰</div>
+        <div class="bell">♧</div>
+      </header>
 
-      <div class="hamb">☰</div>
-
-      <div class="bell">♧</div>
-
-    </header>
-
-
-    <div class="greeting">
-
-      <h2>
-        Hai! 👋
-      </h2>
-
-      <p>
-        Jom urus kewangan dengan lebih bijak.
-      </p>
-
-    </div>
-
-
-    <div class="summary-grid">
-
-      <div class="card">
-
-        <small>
-          Duit Masuk
-        </small>
-
-        <strong id="incomeTotal">
-          RM 0.00
-        </strong>
-
-        <em class="down">
-          ↓
-        </em>
-
+      <div class="greeting">
+        <h2>Hai! 👋</h2>
+        <p>Jom urus kewangan dengan lebih bijak.</p>
       </div>
 
-
-      <div class="card">
-
-        <small>
-          Duit Keluar
-        </small>
-
-        <strong id="expenseTotal">
-          RM 0.00
-        </strong>
-
-        <em class="up">
-          ↑
-        </em>
-
-      </div>
-
-    </div>
-
-
-    <div class="balance">
-
-      <div>
-
-        <small>
-          Baki Semasa
-        </small>
-
-        <strong id="balance">
-          RM 0.00
-        </strong>
-
-      </div>
-
-      <span>
-        ▰
-      </span>
-
-    </div>
-
-
-    <div class="section-title">
-
-      <b>
-        Ringkasan Bulan Ini
-      </b>
-
-      <a onclick="show('report')">
-        Laporan
-      </a>
-
-    </div>
-
-
-    <div class="list">
-
-      <div class="row">
-
-        <span class="dot green">
-          ↓
-        </span>
-
-        <b>
-          Pendapatan
-        </b>
-
-        <span id="incomeRow">
-          RM 0.00
-        </span>
-
-      </div>
-
-
-      <div class="row">
-
-        <span class="dot pink">
-          ↗
-        </span>
-
-        <b>
-          Perbelanjaan
-        </b>
-
-        <span id="expenseRow">
-          RM 0.00
-        </span>
-
-      </div>
-
-
-      <div class="row">
-
-        <span class="dot gold">
-          ▣
-        </span>
-
-        <b>
-          Simpanan
-        </b>
-
-        <span id="savingRow">
-          RM 0.00
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <div class="section-title">
-
-      <b>
-        Transaksi Terbaru
-      </b>
-
-      <a onclick="show('items')">
-        Lihat semua
-      </a>
-
-    </div>
-
-
-    <div
-      id="recent"
-      class="list"
-    ></div>
-
-
-    <nav>
-
-      <button
-        class="active"
-        onclick="show('home')"
-      >
-        ⌂
-        <small>
-          Utama
-        </small>
-      </button>
-
-
-      <button
-        onclick="show('accounts')"
-      >
-        ▤
-        <small>
-          Akaun
-        </small>
-      </button>
-
-
-      <button
-        class="add"
-        onclick="openAdd()"
-      >
-        ＋
-      </button>
-
-
-      <button
-        onclick="show('items')"
-      >
-        ▥
-        <small>
-          Item Beli
-        </small>
-      </button>
-
-
-      <button
-        onclick="show('report')"
-      >
-        📊
-        <small>
-          Laporan
-        </small>
-      </button>
-
-    </nav>
-
-  </section>
-
-
-  <!-- ================= AKAUN ================= -->
-
-  <section
-    class="screen hidden"
-    id="accounts"
-  >
-
-    <header class="pagehead">
-
-      <button
-        onclick="show('home')"
-      >
-        ‹
-      </button>
-
-      <h2>
-        Akaun
-      </h2>
-
-      <button
-        onclick="openAccount()"
-      >
-        ＋
-      </button>
-
-    </header>
-
-
-    <div class="chips">
-
-      <button class="chip active">
-        Semua
-      </button>
-
-      <button class="chip">
-        Bank
-      </button>
-
-      <button class="chip">
-        E-Wallet
-      </button>
-
-      <button class="chip">
-        Tunai
-      </button>
-
-    </div>
-
-
-    <h3>
-      Akaun Saya
-    </h3>
-
-
-    <div id="accountList"></div>
-
-
-    <div class="totalbox">
-
-      <small>
-        Jumlah Keseluruhan
-      </small>
-
-      <strong id="accountTotal">
-        RM 0.00
-      </strong>
-
-    </div>
-
-
-    <nav>
-
-      <button onclick="show('home')">
-        ⌂
-        <small>
-          Utama
-        </small>
-      </button>
-
-
-      <button class="active">
-        ▤
-        <small>
-          Akaun
-        </small>
-      </button>
-
-
-      <button
-        class="add"
-        onclick="openAdd()"
-      >
-        ＋
-      </button>
-
-
-      <button onclick="show('items')">
-        ▥
-        <small>
-          Item Beli
-        </small>
-      </button>
-
-
-      <button onclick="show('report')">
-        📊
-        <small>
-          Laporan
-        </small>
-      </button>
-
-    </nav>
-
-  </section>
-
-
-  <!-- ================= ITEM BELI ================= -->
-
-  <section
-    class="screen hidden"
-    id="items"
-  >
-
-    <header class="pagehead">
-
-      <button
-        onclick="show('home')"
-      >
-        ‹
-      </button>
-
-      <h2>
-        Item Beli
-      </h2>
-
-      <button
-        onclick="openAdd()"
-      >
-        ＋
-      </button>
-
-    </header>
-
-
-    <div
-      id="itemList"
-      class="item-list"
-    ></div>
-
-
-    <nav>
-
-      <button onclick="show('home')">
-        ⌂
-        <small>
-          Utama
-        </small>
-      </button>
-
-
-      <button onclick="show('accounts')">
-        ▤
-        <small>
-          Akaun
-        </small>
-      </button>
-
-
-      <button
-        class="add"
-        onclick="openAdd()"
-      >
-        ＋
-      </button>
-
-
-      <button class="active">
-        ▥
-        <small>
-          Item Beli
-        </small>
-      </button>
-
-
-      <button onclick="show('report')">
-        📊
-        <small>
-          Laporan
-        </small>
-      </button>
-
-    </nav>
-
-  </section>
-
-
-  <!-- ================= LAPORAN ================= -->
-
-  <section
-    class="screen hidden"
-    id="report"
-  >
-
-    <header class="pagehead">
-
-      <button
-        onclick="show('home')"
-      >
-        ‹
-      </button>
-
-      <h2>
-        Laporan
-      </h2>
-
-      <button
-        onclick="show('home')"
-      >
-        ⌂
-      </button>
-
-    </header>
-
-
-    <div
-      style="
-        padding:20px;
-      "
-    >
-
-      <div
-        class="card"
-        style="
-          margin-bottom:15px;
-        "
-      >
-
-        <small>
-          Duit Masuk
-        </small>
-
-        <strong id="reportIncome">
-          RM 0.00
-        </strong>
-
-      </div>
-
-
-      <div
-        class="card"
-        style="
-          margin-bottom:15px;
-        "
-      >
-
-        <small>
-          Duit Keluar
-        </small>
-
-        <strong id="reportExpense">
-          RM 0.00
-        </strong>
-
-      </div>
-
-
-      <div
-        class="balance"
-        style="
-          margin-bottom:20px;
-        "
-      >
-
-        <div>
-
-          <small>
-            Baki
-          </small>
-
-          <strong id="reportBalance">
-            RM 0.00
-          </strong>
-
+      <div class="summary-grid">
+
+        <div class="card">
+          <small>Duit Masuk</small>
+          <strong id="incomeTotal">RM 0.00</strong>
+          <em class="down">↓</em>
         </div>
 
-        <span>
-          📊
-        </span>
+        <div class="card">
+          <small>Duit Keluar</small>
+          <strong id="expenseTotal">RM 0.00</strong>
+          <em class="up">↑</em>
+        </div>
 
       </div>
 
+      <div class="balance">
+        <div>
+          <small>Baki Semasa</small>
+          <strong id="balance">RM 0.00</strong>
+        </div>
+        <span style="font-size:30px;">−</span>
+      </div>
 
-      <h3>
-        Ringkasan
-      </h3>
 
+      <div class="section-title">
+        <b>Ringkasan Bulan Ini</b>
+        <a onclick="show('report')">Lihat semua</a>
+      </div>
 
       <div class="list">
 
         <div class="row">
-
-          <b>
-            Jumlah transaksi
-          </b>
-
-          <span id="reportCount">
-            0
-          </span>
-
+          <div class="row-left">
+            <b>↓ &nbsp; Pendapatan</b>
+          </div>
+          <span class="amount" id="incomeRow">RM 0.00</span>
         </div>
 
+        <div class="row">
+          <div class="row-left">
+            <b>↗ &nbsp; Perbelanjaan</b>
+          </div>
+          <span class="amount" id="expenseRow">RM 0.00</span>
+        </div>
 
         <div class="row">
+          <div class="row-left">
+            <b>▣ &nbsp; Simpanan</b>
+          </div>
+          <span class="amount">RM 0.00</span>
+        </div>
 
-          <b>
-            Purata perbelanjaan
-          </b>
+      </div>
 
-          <span id="reportAverage">
-            RM 0.00
-          </span>
+
+      <div class="section-title">
+        <b>Transaksi Terbaru</b>
+        <a onclick="show('transactions')">Lihat semua</a>
+      </div>
+
+      <div class="list" id="recent"></div>
+
+
+      <div class="section-title">
+        <b>Item Beli</b>
+        <a onclick="show('items')">Lihat semua</a>
+      </div>
+
+      <div class="list" id="itemList"></div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================
+       TRANSAKSI
+       ========================= -->
+
+  <section class="screen hidden" id="transactions">
+    <div class="app-card">
+
+      <header class="topbar">
+        <button class="back" onclick="show('home')">‹</button>
+        <div class="page-title">Transaksi</div>
+        <button class="plus" onclick="openAdd()">+</button>
+      </header>
+
+      <div class="page-list">
+        <div class="list" id="transactionList"></div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================
+       ITEM BELI
+       ========================= -->
+
+  <section class="screen hidden" id="items">
+    <div class="app-card">
+
+      <header class="topbar">
+        <button class="back" onclick="show('home')">‹</button>
+        <div class="page-title">Item Beli</div>
+        <button class="plus" onclick="openAdd()">+</button>
+      </header>
+
+      <div class="page-list">
+        <div class="list" id="itemList"></div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================
+       AKAUN
+       ========================= -->
+
+  <section class="screen hidden" id="account">
+    <div class="app-card">
+
+      <header class="topbar">
+        <button class="back" onclick="show('home')">‹</button>
+        <div class="page-title">Akaun</div>
+        <button class="plus" onclick="openAccount()">+</button>
+      </header>
+
+      <div class="page-list">
+
+        <div class="report-card">
+
+          <div class="report-row">
+            <div class="report-label">
+              <b>Jumlah Akaun</b>
+            </div>
+
+            <div class="report-value" id="accountTotal">
+              RM 0.00
+            </div>
+          </div>
+
+          <div id="accountList"></div>
 
         </div>
 
       </div>
 
     </div>
-
-
-    <nav>
-
-      <button onclick="show('home')">
-        ⌂
-        <small>
-          Utama
-        </small>
-      </button>
-
-
-      <button onclick="show('accounts')">
-        ▤
-        <small>
-          Akaun
-        </small>
-      </button>
-
-
-      <button
-        class="add"
-        onclick="openAdd()"
-      >
-        ＋
-      </button>
-
-
-      <button onclick="show('items')">
-        ▥
-        <small>
-          Item Beli
-        </small>
-      </button>
-
-
-      <button class="active">
-        📊
-        <small>
-          Laporan
-        </small>
-      </button>
-
-    </nav>
-
   </section>
 
-</div>
+
+  <!-- =========================
+       LAPORAN
+       ========================= -->
+
+  <section class="screen hidden" id="report">
+    <div class="app-card">
+
+      <header class="topbar">
+        <button class="back" onclick="show('home')">‹</button>
+
+        <div class="page-title">
+          Laporan
+        </div>
+
+        <button
+          class="back"
+          onclick="show('home')"
+          style="font-size:28px;">
+          ⌂
+        </button>
+      </header>
 
 
-<!-- ================= MODAL TRANSAKSI ================= -->
+      <div class="report-box">
 
-<div
-  class="modal hidden"
-  id="modal"
->
-
-  <div class="sheet">
-
-    <button
-      class="close"
-      onclick="closeModal()"
-    >
-      ×
-    </button>
+        <div class="card" style="margin-bottom:18px;">
+          <small>Duit Masuk</small>
+          <strong id="reportIncome">RM 0.00</strong>
+        </div>
 
 
-    <h2 id="modalTitle">
-      Tambah Transaksi
-    </h2>
+        <div class="card" style="margin-bottom:18px;">
+          <small>Duit Keluar</small>
+          <strong id="reportExpense">RM 0.00</strong>
+        </div>
 
 
-    <div class="toggle">
-
-      <button
-        id="incomeTab"
-        class="sel"
-        onclick="setType('income')"
-      >
-        Duit Masuk
-      </button>
+        <div class="report-balance">
+          <small>Baki</small>
+          <strong id="reportBalance">RM 0.00</strong>
+        </div>
 
 
-      <button
-        id="expenseTab"
-        onclick="setType('expense')"
-      >
-        Duit Keluar
-      </button>
+        <h2 class="report-heading">
+          Ringkasan
+        </h2>
+
+
+        <div class="report-card">
+
+          <div class="report-row">
+            <div class="report-label">
+              <b>Jumlah transaksi</b>
+            </div>
+
+            <div class="report-value" id="reportCount">
+              0
+            </div>
+          </div>
+
+
+          <div class="report-row">
+            <div class="report-label">
+              <b>Purata perbelanjaan</b>
+            </div>
+
+            <div class="report-value" id="reportAverage">
+              RM 0.00
+            </div>
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
+  </section>
 
 
-    <label>
+  <!-- =========================
+       MODAL TRANSAKSI
+       ========================= -->
 
-      Nama / Item
+  <div
+    id="txModal"
+    class="modal hidden">
+
+    <div class="modal-box">
+
+      <h2>Tambah Transaksi</h2>
+
+      <label>Jenis</label>
+
+      <select id="type">
+        <option value="income">Duit Masuk</option>
+        <option value="expense">Duit Keluar</option>
+      </select>
+
+
+      <label>Nama</label>
 
       <input
         id="name"
-        placeholder="Contoh: Gaji / Barang dapur"
-      >
-
-    </label>
+        type="text"
+        placeholder="Contoh: Gaji">
 
 
-    <label>
-
-      Jumlah (RM)
+      <label>Jumlah</label>
 
       <input
         id="amount"
         type="number"
         inputmode="decimal"
-        placeholder="0.00"
-      >
-
-    </label>
+        placeholder="0.00">
 
 
-    <label>
-
-      Kategori
+      <label>Kategori</label>
 
       <input
         id="category"
-        placeholder="Contoh: Gaji, Keperluan Harian"
-      >
-
-    </label>
+        type="text"
+        placeholder="Contoh: Barang">
 
 
-    <button
-      class="primary"
-      onclick="saveTx()"
-    >
-      Simpan
-    </button>
+      <div class="modal-actions">
+
+        <button
+          class="cancel"
+          onclick="closeModal()">
+          Batal
+        </button>
+
+        <button
+          class="save"
+          onclick="saveTx()">
+          Simpan
+        </button>
+
+      </div>
+
+    </div>
 
   </div>
 
-</div>
 
+  <!-- =========================
+       MODAL AKAUN
+       ========================= -->
 
-<!-- ================= MODAL AKAUN ================= -->
+  <div
+    id="accountModal"
+    class="modal hidden">
 
-<div
-  class="modal hidden"
-  id="accountModal"
->
+    <div class="modal-box">
 
-  <div class="sheet">
+      <h2>Tambah Akaun</h2>
 
-    <button
-      class="close"
-      onclick="closeAccount()"
-    >
-      ×
-    </button>
-
-
-    <h2 id="accountModalTitle">
-      Tambah Akaun
-    </h2>
-
-
-    <label>
-
-      Nama Akaun
+      <label>Nama akaun</label>
 
       <input
         id="accName"
-        placeholder="Contoh: Maybank"
-      >
-
-    </label>
+        type="text"
+        placeholder="Contoh: Bank">
 
 
-    <label>
-
-      Baki (RM)
+      <label>Baki</label>
 
       <input
         id="accAmount"
         type="number"
         inputmode="decimal"
-        placeholder="0.00"
-      >
-
-    </label>
+        placeholder="0.00">
 
 
-    <button
-      class="primary"
-      onclick="saveAccount()"
-    >
-      Simpan
-    </button>
+      <div class="modal-actions">
+
+        <button
+          class="cancel"
+          onclick="closeAccount()">
+          Batal
+        </button>
+
+        <button
+          class="save"
+          onclick="saveAccount()">
+          Simpan
+        </button>
+
+      </div>
+
+    </div>
 
   </div>
 
@@ -815,6 +898,100 @@
 
 
 <script src="app.js"></script>
+
+<script>
+/* ==========================================
+   TAMBAHAN UNTUK LAPORAN
+   ========================================== */
+
+function updateReportPage() {
+
+  if (typeof transactions === "undefined") {
+    return;
+  }
+
+  const income = transactions
+    .filter(t => t.type === "income")
+    .reduce((sum, t) => sum + Number(t.amount || 0), 0);
+
+  const expense = transactions
+    .filter(t => t.type === "expense")
+    .reduce((sum, t) => sum + Number(t.amount || 0), 0);
+
+  const balance = income - expense;
+
+  const count = transactions.length;
+
+  const average =
+    expense > 0 &&
+    transactions.filter(t => t.type === "expense").length > 0
+      ? expense /
+        transactions.filter(t => t.type === "expense").length
+      : 0;
+
+
+  const incomeEl =
+    document.getElementById("reportIncome");
+
+  const expenseEl =
+    document.getElementById("reportExpense");
+
+  const balanceEl =
+    document.getElementById("reportBalance");
+
+  const countEl =
+    document.getElementById("reportCount");
+
+  const averageEl =
+    document.getElementById("reportAverage");
+
+
+  if (incomeEl) {
+    incomeEl.textContent =
+      "RM " + income.toFixed(2);
+  }
+
+  if (expenseEl) {
+    expenseEl.textContent =
+      "RM " + expense.toFixed(2);
+  }
+
+  if (balanceEl) {
+    balanceEl.textContent =
+      "RM " + balance.toFixed(2);
+  }
+
+  if (countEl) {
+    countEl.textContent = count;
+  }
+
+  if (averageEl) {
+    averageEl.textContent =
+      "RM " + average.toFixed(2);
+  }
+}
+
+
+/* Pastikan laporan dikemas kini apabila dibuka */
+
+const oldShow = window.show;
+
+window.show = function(id) {
+
+  if (typeof oldShow === "function") {
+    oldShow(id);
+  }
+
+  if (id === "report") {
+    setTimeout(updateReportPage, 50);
+  }
+};
+
+
+/* Jalankan sekali */
+
+setTimeout(updateReportPage, 100);
+</script>
 
 </body>
 </html>
