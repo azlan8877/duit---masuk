@@ -17,3 +17,59 @@
   font-size: 16px;
   color: #5f6863;
 }
+/* ===== FIX SUSUNAN TRANSAKSI & LAPORAN ===== */
+
+.row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.row > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.row > div b {
+  display: block;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.row > div small {
+  display: block;
+  margin-top: 3px;
+  line-height: 1.2;
+}
+
+.row > span:last-child {
+  margin-left: auto !important;
+  flex: 0 0 auto !important;
+  min-width: 90px;
+  text-align: right !important;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* Ringkasan laporan */
+.list .row {
+  justify-content: space-between;
+}
+
+.list .row > span:last-child {
+  margin-left: auto !important;
+}
+
+/* Supaya nama panjang tidak menolak jumlah keluar skrin */
+@media (max-width: 500px) {
+  .row > div {
+    max-width: calc(100% - 105px);
+  }
+
+  .row > span:last-child {
+    min-width: 90px;
+    font-size: 15px;
+  }
+}
