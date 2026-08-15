@@ -537,93 +537,38 @@ function renderAccounts() {
 // ================= ITEM BELI =================
 
 function renderItems() {
-
-  const list =
-    document.getElementById("itemList");
+  const list = document.getElementById("itemList");
 
   if (!list) return;
 
-
-  const expenses =
-    transactions.filter(
-      t => t.type === "expense"
-    );
-
-
-  if (expenses.length === 0) {
-
+  if (transactions.length === 0) {
     list.innerHTML = `
       <div class="row">
         <span>Belum ada item beli</span>
       </div>
     `;
-
     return;
   }
 
+  list.innerHTML = transactions.map(t => `
+    <div class="row">
 
-  list.innerHTML =
-    expenses
-      .map(t => `
+      <span class="dot ${t.type === "income" ? "green" : "pink"}"></span>
 
-        <div class="row">
+      <div>
+        <b>${escapeHtml(t.name)}</b>
+        <small>
+          ${escapeHtml(t.category || "Umum")}
+        </small>
+      </div>
 
-          <div
-            style="
-              display:flex;
-              align-items:center;
-              gap:12px;
-              min-width:0;
-            "
-          >
+      <span>
+        ${t.type === "income" ? "+" : "-"} ${money(t.amount)}
+      </span>
 
-            <div
-              style="
-                min-width:0;
-              "
-            >
-
-              <b
-                style="
-                  display:block;
-                "
-              >
-                ${escapeHtml(t.name)}
-              </b>
-
-              <small
-                style="
-                  display:block;
-                  color:#777;
-                  margin-top:4px;
-                "
-              >
-                ${escapeHtml(
-                  t.category || "Umum"
-                )}
-              </small>
-
-            </div>
-
-          </div>
-
-
-          <span
-            style="
-              white-space:nowrap;
-              font-weight:600;
-            "
-          >
-            ${money(t.amount)}
-          </span>
-
-        </div>
-
-      `)
-      .join("");
+    </div>
+  `).join("");
 }
-
-
 // ================= KESELAMATAN HTML =================
 
 function escapeHtml(text) {
