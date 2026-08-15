@@ -72,6 +72,13 @@
     <h2>Tambah Akaun</h2>
     <label>Nama Akaun<input id="accName" placeholder="Contoh: Maybank"></label>
     <label>Baki (RM)<input id="accAmount" type="number" inputmode="decimal" placeholder="0.00"></label>
+    <label>Jenis Akaun
+<select id="accType">
+  <option value="bank">Bank</option>
+  <option value="ewallet">E-Wallet</option>
+  <option value="tunai">Tunai</option>
+</select>
+</label>
     <button class="primary" onclick="saveAccount()">Simpan</button>
   </div>
 </div>
