@@ -278,28 +278,36 @@ function saveTx() {
 ========================= */
 
 function editTransaction(id) {
+  const tx = transactions.find(t => String(t.id) === String(id));
 
-  const tx = transactions.find(t => t.id === id);
+  if (!tx) {
+    alert("Transaksi tidak dijumpai.");
+    return;
+  }
 
-  if (!tx) return;
-
-  editingId = id;
+  editingId = tx.id;
 
   const modal = document.getElementById("modal");
 
-  if (!modal) return;
+  if (!modal) {
+    alert("Borang Edit tidak dijumpai.");
+    return;
+  }
 
   modal.classList.remove("hidden");
 
-  document.getElementById("modalTitle").textContent = "Edit Transaksi";
+  const title = document.getElementById("modalTitle");
+  const name = document.getElementById("name");
+  const amount = document.getElementById("amount");
+  const category = document.getElementById("category");
 
-  document.getElementById("name").value = tx.name;
-  document.getElementById("amount").value = tx.amount;
-  document.getElementById("category").value = tx.category;
+  if (title) title.textContent = "Edit Transaksi";
+  if (name) name.value = tx.name || "";
+  if (amount) amount.value = tx.amount || "";
+  if (category) category.value = tx.category || "";
 
-  setType(tx.type);
+  setType(tx.type || "income");
 }
-
 /* =========================
    HAPUS
 ========================= */
