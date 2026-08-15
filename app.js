@@ -1,18 +1,61 @@
+/* =========================================================
+   DUIT MASUK - APLIKASI KEWANGAN
+   app.js
+========================================================= */
+
+
+/* =========================================================
+   DATA
+========================================================= */
+
 const KEY_TX = "duitMasuk_transactions";
 const KEY_ACCOUNTS = "duitMasuk_accounts";
 
-let transactions = JSON.parse(localStorage.getItem(KEY_TX) || "[]");
-let accounts = JSON.parse(localStorage.getItem(KEY_ACCOUNTS) || "[]");
+let transactions = [];
+let accounts = [];
 
 let currentType = "income";
 let currentAccountFilter = "all";
 
-function money(value) {
-  return "RM " + Number(value || 0).toFixed(2);
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+try {
+  transactions = JSON.parse(
+    localStorage.getItem(KEY_TX) || "[]"
+  );
+} catch (error) {
+  transactions = [];
 }
 
+try {
+  accounts = JSON.parse(
+    localStorage.getItem(KEY_ACCOUNTS) || "[]"
+  );
+} catch (error) {
+  accounts = [];
+}
+
+
+/* =========================================================
+   FORMAT DUIT
+========================================================= */
+
+function money(value) {
+  const number = Number(value || 0);
+
+  return "RM " + number.toFixed(2);
+}
+
+
+/* =========================================================
+   KESELAMATAN HTML
+========================================================= */
+
 function escapeHtml(text) {
-  return String(text)
+  return String(text ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -21,28 +64,30 @@ function escapeHtml(text) {
 }
 
 
-/* =========================
-   NAVIGASI
-========================= */
+/* =========================================================
+   NAVIGASI SCREEN
+========================================================= */
 
 function show(id) {
-  document.querySelectorAll(".screen").forEach(el => {
-    el.classList.add("hidden");
-  });
+  document
+    .querySelectorAll(".screen")
+    .forEach(screen => {
+      screen.classList.add("hidden");
+    });
 
-  const screen = document.getElementById(id);
+  const target = document.getElementById(id);
 
-  if (screen) {
-    screen.classList.remove("hidden");
+  if (target) {
+    target.classList.remove("hidden");
   }
 
   render();
 }
 
 
-/* =========================
-   TRANSAKSI
-========================= */
+/* =========================================================
+   MODAL TRANSAKSI
+========================================================= */
 
 function openAdd() {
   const modal = document.getElementById("modal");
@@ -54,6 +99,7 @@ function openAdd() {
   setType("income");
 }
 
+
 function closeModal() {
   const modal = document.getElementById("modal");
 
@@ -62,101 +108,177 @@ function closeModal() {
   }
 }
 
+
+/* =========================================================
+   PILIH DUIT MASUK / DUIT KELUAR
+========================================================= */
+
 function setType(type) {
   currentType = type;
 
-  const incomeTab = document.getElementById("incomeTab");
-  const expenseTab = document.getElementById("expenseTab");
+  const incomeTab =
+    document.getElementById("incomeTab");
+
+  const expenseTab =
+    document.getElementById("expenseTab");
 
   if (incomeTab) {
-    incomeTab.classList.toggle("sel", type === "income");
+    incomeTab.classList.toggle(
+      "sel",
+      type === "income"
+    );
   }
 
   if (expenseTab) {
-    expenseTab.classList.toggle("sel", type === "expense");
+    expenseTab.classList.toggle(
+      "sel",
+      type === "expense"
+    );
   }
 }
 
+
+/* =========================================================
+   SIMPAN TRANSAKSI
+========================================================= */
+
 function saveTx() {
-  const nameEl = document.getElementById("name");
-  const amountEl = document.getElementById("amount");
-  const categoryEl = document.getElementById("category");
+  const nameEl =
+    document.getElementById("name");
+
+  const amountEl =
+    document.getElementById("amount");
+
+  const categoryEl =
+    document.getElementById("category");
+
 
   if (!nameEl || !amountEl || !categoryEl) {
     return;
   }
 
-  const name = nameEl.value.trim();
-  const amount = Number(amountEl.value);
-  const category = categoryEl.value.trim();
 
-  if (!name || !amount || amount <= 0) {
-    alert("Sila masukkan nama dan jumlah.");
+  const name =
+    nameEl.value.trim();
+
+  const amount =
+    Number(amountEl.value);
+
+  const category =
+    categoryEl.value.trim();
+
+
+  if (!name) {
+    alert("Sila masukkan nama transaksi.");
     return;
   }
 
-  transactions.unshift({
+
+  if (!amount || amount <= 0) {
+    alert("Sila masukkan jumlah yang betul.");
+    return;
+  }
+
+
+  const transaction = {
     id: Date.now(),
     name: name,
     amount: amount,
     category: category || "Umum",
     type: currentType,
     date: new Date().toISOString()
-  });
+  };
+
+
+  transactions.unshift(transaction);
+
 
   localStorage.setItem(
     KEY_TX,
     JSON.stringify(transactions)
   );
 
+
   nameEl.value = "";
   amountEl.value = "";
   categoryEl.value = "";
 
+
   closeModal();
 
+
   render();
+
+
   show("home");
 }
 
 
-/* =========================
+/* =========================================================
    AKAUN
-========================= */
+========================================================= */
 
 function openAccount() {
-  const modal = document.getElementById("accountModal");
+  const modal =
+    document.getElementById("accountModal");
 
   if (modal) {
     modal.classList.remove("hidden");
   }
 }
 
+
 function closeAccount() {
-  const modal = document.getElementById("accountModal");
+  const modal =
+    document.getElementById("accountModal");
 
   if (modal) {
     modal.classList.add("hidden");
   }
 }
 
+
+/* =========================================================
+   SIMPAN AKAUN
+========================================================= */
+
 function saveAccount() {
-  const nameEl = document.getElementById("accName");
-  const amountEl = document.getElementById("accAmount");
-  const typeEl = document.getElementById("accType");
+  const nameEl =
+    document.getElementById("accName");
+
+  const amountEl =
+    document.getElementById("accAmount");
+
+  const typeEl =
+    document.getElementById("accType");
+
 
   if (!nameEl || !amountEl) {
     return;
   }
 
-  const name = nameEl.value.trim();
-  const amount = Number(amountEl.value);
-  const type = typeEl ? typeEl.value : "bank";
 
-  if (!name || amount < 0) {
-    alert("Sila masukkan nama akaun dan baki.");
+  const name =
+    nameEl.value.trim();
+
+  const amount =
+    Number(amountEl.value);
+
+  const type =
+    typeEl ? typeEl.value : "bank";
+
+
+  if (!name) {
+    alert("Sila masukkan nama akaun.");
     return;
   }
+
+
+  if (isNaN(amount) || amount < 0) {
+    alert("Sila masukkan baki akaun yang betul.");
+    return;
+  }
+
 
   accounts.push({
     id: Date.now(),
@@ -165,36 +287,38 @@ function saveAccount() {
     type: type
   });
 
+
   localStorage.setItem(
     KEY_ACCOUNTS,
     JSON.stringify(accounts)
   );
 
+
   nameEl.value = "";
   amountEl.value = "";
 
+
   closeAccount();
 
-  renderAccounts();
-}
-
-
-/* =========================
-   AKAUN - FILTER
-========================= */
-
-function filterAccounts(type) {
-  currentAccountFilter = type;
 
   renderAccounts();
 }
 
-function getAccountTypeName(type) {
+
+/* =========================================================
+   NAMA JENIS AKAUN
+========================================================= */
+
+function accountTypeName(type) {
+
   if (type === "bank") {
     return "Bank";
   }
 
-  if (type === "ewallet") {
+  if (
+    type === "ewallet" ||
+    type === "e-wallet"
+  ) {
     return "E-Wallet";
   }
 
@@ -206,302 +330,644 @@ function getAccountTypeName(type) {
 }
 
 
-/* =========================
+/* =========================================================
+   FILTER AKAUN
+========================================================= */
+
+function filterAccounts(type) {
+
+  currentAccountFilter = type;
+
+  updateAccountFilterButtons();
+
+  renderAccounts();
+}
+
+
+function updateAccountFilterButtons() {
+
+  const screen =
+    document.getElementById("accounts");
+
+  if (!screen) {
+    return;
+  }
+
+
+  const buttons =
+    screen.querySelectorAll("button");
+
+
+  buttons.forEach(button => {
+
+    const text =
+      button.textContent.trim();
+
+
+    let type = null;
+
+
+    if (text === "Semua") {
+      type = "all";
+    }
+
+    if (text === "Bank") {
+      type = "bank";
+    }
+
+    if (text === "E-Wallet") {
+      type = "ewallet";
+    }
+
+    if (text === "Tunai") {
+      type = "tunai";
+    }
+
+
+    if (type !== null) {
+
+      button.classList.toggle(
+        "sel",
+        currentAccountFilter === type
+      );
+
+    }
+
+  });
+}
+
+
+/* =========================================================
+   PASANG FILTER AKAUN
+========================================================= */
+
+function setupAccountFilters() {
+
+  const screen =
+    document.getElementById("accounts");
+
+  if (!screen) {
+    return;
+  }
+
+
+  const buttons =
+    screen.querySelectorAll("button");
+
+
+  buttons.forEach(button => {
+
+    const text =
+      button.textContent.trim();
+
+
+    if (text === "Semua") {
+
+      button.onclick = function () {
+        filterAccounts("all");
+      };
+
+    }
+
+
+    if (text === "Bank") {
+
+      button.onclick = function () {
+        filterAccounts("bank");
+      };
+
+    }
+
+
+    if (text === "E-Wallet") {
+
+      button.onclick = function () {
+        filterAccounts("ewallet");
+      };
+
+    }
+
+
+    if (text === "Tunai") {
+
+      button.onclick = function () {
+        filterAccounts("tunai");
+      };
+
+    }
+
+  });
+
+
+  updateAccountFilterButtons();
+}
+
+
+/* =========================================================
    RENDER UTAMA
-========================= */
+========================================================= */
 
 function render() {
-  const income = transactions
-    .filter(t => t.type === "income")
-    .reduce((sum, t) => sum + Number(t.amount || 0), 0);
 
-  const expense = transactions
-    .filter(t => t.type === "expense")
-    .reduce((sum, t) => sum + Number(t.amount || 0), 0);
+  const income =
+    transactions
+      .filter(t => t.type === "income")
+      .reduce(
+        (sum, t) =>
+          sum + Number(t.amount || 0),
+        0
+      );
 
-  const balance = income - expense;
 
-  const incomeTotal = document.getElementById("incomeTotal");
-  const expenseTotal = document.getElementById("expenseTotal");
-  const balanceEl = document.getElementById("balance");
-  const incomeRow = document.getElementById("incomeRow");
-  const expenseRow = document.getElementById("expenseRow");
+  const expense =
+    transactions
+      .filter(t => t.type === "expense")
+      .reduce(
+        (sum, t) =>
+          sum + Number(t.amount || 0),
+        0
+      );
+
+
+  const balance =
+    income - expense;
+
+
+  /* DUIT MASUK */
+
+  const incomeTotal =
+    document.getElementById("incomeTotal");
 
   if (incomeTotal) {
-    incomeTotal.textContent = money(income);
+    incomeTotal.textContent =
+      money(income);
   }
+
+
+  /* DUIT KELUAR */
+
+  const expenseTotal =
+    document.getElementById("expenseTotal");
 
   if (expenseTotal) {
-    expenseTotal.textContent = money(expense);
+    expenseTotal.textContent =
+      money(expense);
   }
+
+
+  /* BAKI */
+
+  const balanceEl =
+    document.getElementById("balance");
 
   if (balanceEl) {
-    balanceEl.textContent = money(balance);
+    balanceEl.textContent =
+      money(balance);
   }
+
+
+  /* RINGKASAN */
+
+  const incomeRow =
+    document.getElementById("incomeRow");
 
   if (incomeRow) {
-    incomeRow.textContent = money(income);
+    incomeRow.textContent =
+      money(income);
   }
+
+
+  const expenseRow =
+    document.getElementById("expenseRow");
 
   if (expenseRow) {
-    expenseRow.textContent = money(expense);
+    expenseRow.textContent =
+      money(expense);
   }
 
+
+  /* SENARAI */
+
   renderRecent();
+
   renderAccounts();
+
   renderItems();
 }
 
 
-/* =========================
+/* =========================================================
    TRANSAKSI TERBARU
-========================= */
+========================================================= */
 
 function renderRecent() {
-  const recent = document.getElementById("recent");
+
+  const recent =
+    document.getElementById("recent");
+
 
   if (!recent) {
     return;
   }
 
+
+  /* TIADA TRANSAKSI */
+
   if (transactions.length === 0) {
+
     recent.innerHTML = `
-      <div class="row">
-        <span>Belum ada transaksi</span>
+      <div style="
+        padding:20px;
+        text-align:center;
+        color:#777;
+      ">
+        Belum ada transaksi
       </div>
     `;
+
     return;
   }
 
-  recent.innerHTML = transactions
-    .slice(0, 5)
-    .map(t => `
-      <div
-        class="row"
-        style="
-          display:flex;
-          align-items:center;
-          justify-content:space-between;
-          gap:16px;
-          width:100%;
-          box-sizing:border-box;
-        "
-      >
 
-        <div
-          style="
-            display:flex;
+  /* SENARAI TRANSAKSI */
+
+  recent.innerHTML =
+    transactions
+      .slice(0, 5)
+      .map(t => {
+
+        const isIncome =
+          t.type === "income";
+
+
+        const sign =
+          isIncome ? "+" : "-";
+
+
+        const bg =
+          isIncome
+            ? "#dff4e7"
+            : "#fde1e4";
+
+
+        const color =
+          isIncome
+            ? "#4d9b68"
+            : "#d66a76";
+
+
+        return `
+          <div style="
+            display:grid;
+            grid-template-columns:minmax(0,1fr) auto;
             align-items:center;
             gap:12px;
-            min-width:0;
-            flex:1;
-          "
-        >
+            width:100%;
+            min-height:72px;
+            padding:14px 16px;
+            box-sizing:border-box;
+            border-bottom:1px solid #eee;
+          ">
 
-          <span
-            class="dot ${t.type === "income" ? "green" : "pink"}"
-            style="
-              flex-shrink:0;
+            <div style="
               display:flex;
               align-items:center;
-              justify-content:center;
-            "
-          >
-            ${t.type === "income" ? "↓" : "↑"}
-          </span>
-
-          <div
-            style="
+              gap:12px;
               min-width:0;
-              overflow:hidden;
-            "
-          >
-            <b
-              style="
-                display:block;
-                white-space:nowrap;
-                overflow:hidden;
-                text-overflow:ellipsis;
-              "
-            >
-              ${escapeHtml(t.name)}
-            </b>
+            ">
 
-            <small
-              style="
-                display:block;
-                color:#777;
-                margin-top:3px;
-              "
-            >
-              ${escapeHtml(t.category || "Umum")}
-            </small>
+              <div style="
+                width:38px;
+                height:38px;
+                min-width:38px;
+                border-radius:50%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:18px;
+                background:${bg};
+                color:${color};
+              ">
+                ${isIncome ? "↓" : "↑"}
+              </div>
+
+
+              <div style="
+                min-width:0;
+                flex:1;
+              ">
+
+                <div style="
+                  font-weight:700;
+                  font-size:16px;
+                  line-height:20px;
+                  color:#18251f;
+                  white-space:nowrap;
+                  overflow:hidden;
+                  text-overflow:ellipsis;
+                ">
+                  ${escapeHtml(t.name)}
+                </div>
+
+
+                <div style="
+                  margin-top:3px;
+                  font-size:13px;
+                  line-height:18px;
+                  color:#777;
+                ">
+                  ${escapeHtml(
+                    t.category || "Umum"
+                  )}
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div style="
+              flex-shrink:0;
+              white-space:nowrap;
+              font-weight:600;
+              font-size:15px;
+              text-align:right;
+              color:#59635f;
+            ">
+              ${sign} ${money(t.amount)}
+            </div>
+
           </div>
+        `;
 
-        </div>
-
-        <span
-          style="
-            flex-shrink:0;
-            white-space:nowrap;
-            font-weight:600;
-            text-align:right;
-          "
-        >
-          ${t.type === "income" ? "+" : "-"} ${money(t.amount)}
-        </span>
-
-      </div>
-    `)
-    .join("");
+      })
+      .join("");
 }
 
 
-/* =========================
+/* =========================================================
    SENARAI AKAUN
-========================= */
+========================================================= */
 
 function renderAccounts() {
-  const list = document.getElementById("accountList");
-  const total = document.getElementById("accountTotal");
+
+  const list =
+    document.getElementById("accountList");
+
+  const total =
+    document.getElementById("accountTotal");
+
 
   if (!list || !total) {
     return;
   }
 
-  const totalAll = accounts.reduce(
-    (sum, a) => sum + Number(a.amount || 0),
-    0
-  );
 
-  total.textContent = money(totalAll);
+  /* JUMLAH SEMUA AKAUN */
 
-  let filteredAccounts = accounts;
+  const totalAmount =
+    accounts.reduce(
+      (sum, account) =>
+        sum + Number(account.amount || 0),
+      0
+    );
 
-  if (currentAccountFilter !== "all") {
-    filteredAccounts = accounts.filter(a => {
-      const accountType = a.type || "bank";
-      return accountType === currentAccountFilter;
-    });
+
+  total.textContent =
+    money(totalAmount);
+
+
+  /* FILTER */
+
+  let filtered =
+    accounts;
+
+
+  if (
+    currentAccountFilter !== "all"
+  ) {
+
+    filtered =
+      accounts.filter(account => {
+
+        const type =
+          account.type || "bank";
+
+
+        if (
+          currentAccountFilter === "ewallet"
+        ) {
+
+          return (
+            type === "ewallet" ||
+            type === "e-wallet"
+          );
+
+        }
+
+
+        return type === currentAccountFilter;
+
+      });
+
   }
 
-  if (filteredAccounts.length === 0) {
+
+  /* TIADA AKAUN */
+
+  if (filtered.length === 0) {
+
     list.innerHTML = `
-      <div class="row">
-        <span>Belum ada akaun</span>
+      <div style="
+        padding:20px;
+        text-align:center;
+        color:#777;
+      ">
+        Belum ada akaun
       </div>
     `;
+
     return;
   }
 
-  list.innerHTML = filteredAccounts
-    .map(a => `
-      <div
-        class="row"
-        style="
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          gap:16px;
-        "
-      >
-        <div>
-          <b>${escapeHtml(a.name)}</b>
 
-          <small style="display:block;color:#777;">
-            ${getAccountTypeName(a.type || "bank")}
-          </small>
-        </div>
+  /* PAPAR AKAUN */
 
-        <span>${money(a.amount)}</span>
-      </div>
-    `)
-    .join("");
+  list.innerHTML =
+    filtered
+      .map(account => {
+
+        return `
+          <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            width:100%;
+            min-height:70px;
+            padding:16px 18px;
+            box-sizing:border-box;
+            border-bottom:1px solid #eee;
+          ">
+
+            <div style="
+              min-width:0;
+              flex:1;
+            ">
+
+              <div style="
+                font-weight:700;
+                font-size:17px;
+                color:#18251f;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow:ellipsis;
+              ">
+                ${escapeHtml(account.name)}
+              </div>
+
+
+              <small style="
+                display:block;
+                margin-top:4px;
+                color:#777;
+              ">
+                ${accountTypeName(
+                  account.type
+                )}
+              </small>
+
+            </div>
+
+
+            <div style="
+              flex-shrink:0;
+              white-space:nowrap;
+              font-size:16px;
+              color:#59635f;
+            ">
+              ${money(account.amount)}
+            </div>
+
+          </div>
+        `;
+
+      })
+      .join("");
+
+
+  updateAccountFilterButtons();
 }
 
 
-/* =========================
+/* =========================================================
    ITEM BELI
-========================= */
+========================================================= */
 
 function renderItems() {
-  const list = document.getElementById("itemList");
+
+  const list =
+    document.getElementById("itemList");
+
 
   if (!list) {
     return;
   }
 
-  const expenses = transactions.filter(
-    t => t.type === "expense"
-  );
+
+  const expenses =
+    transactions.filter(
+      t => t.type === "expense"
+    );
+
+
+  /* TIADA ITEM */
 
   if (expenses.length === 0) {
+
     list.innerHTML = `
-      <div class="row">
-        <span>Belum ada item beli</span>
+      <div style="
+        padding:20px;
+        text-align:center;
+        color:#777;
+      ">
+        Belum ada item beli
       </div>
     `;
+
     return;
   }
 
-  list.innerHTML = expenses
-    .map(t => `
-      <div class="row">
-        <div>
-          <b>${escapeHtml(t.name)}</b>
 
-          <small style="display:block;color:#777;">
-            ${escapeHtml(t.category || "Umum")}
-          </small>
-        </div>
+  /* PAPAR ITEM */
 
-        <span>
-          ${money(t.amount)}
-        </span>
-      </div>
-    `)
-    .join("");
+  list.innerHTML =
+    expenses
+      .map(t => {
+
+        return `
+          <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            width:100%;
+            min-height:68px;
+            padding:14px 16px;
+            box-sizing:border-box;
+            border-bottom:1px solid #eee;
+          ">
+
+            <div style="
+              min-width:0;
+              flex:1;
+            ">
+
+              <div style="
+                font-weight:700;
+                color:#18251f;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow:ellipsis;
+              ">
+                ${escapeHtml(t.name)}
+              </div>
+
+
+              <small style="
+                display:block;
+                margin-top:3px;
+                color:#777;
+              ">
+                ${escapeHtml(
+                  t.category || "Umum"
+                )}
+              </small>
+
+            </div>
+
+
+            <div style="
+              flex-shrink:0;
+              white-space:nowrap;
+              font-weight:600;
+              color:#59635f;
+            ">
+              ${money(t.amount)}
+            </div>
+
+          </div>
+        `;
+
+      })
+      .join("");
 }
 
 
-/* =========================
-   TAB AKAUN
-========================= */
+/* =========================================================
+   START APP
+========================================================= */
 
-function setupAccountTabs() {
-  const accountScreen = document.getElementById("accounts");
+setupAccountFilters();
 
-  if (!accountScreen) {
-    return;
-  }
-
-  const buttons = accountScreen.querySelectorAll("button");
-
-  buttons.forEach(button => {
-    const text = button.textContent.trim();
-
-    if (text === "Semua") {
-      button.onclick = () => filterAccounts("all");
-    }
-
-    if (text === "Bank") {
-      button.onclick = () => filterAccounts("bank");
-    }
-
-    if (text === "E-Wallet") {
-      button.onclick = () => filterAccounts("ewallet");
-    }
-
-    if (text === "Tunai") {
-      button.onclick = () => filterAccounts("tunai");
-    }
-  });
-}
-
-
-/* =========================
-   MULA APP
-========================= */
-
-setupAccountTabs();
 render();
