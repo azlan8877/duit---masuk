@@ -276,23 +276,81 @@ function renderRecent() {
   recent.innerHTML = transactions
     .slice(0, 5)
     .map(t => `
-      <div class="row">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <span class="dot ${t.type === "income" ? "green" : "pink"}">
+      <div
+        class="row"
+        style="
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          gap:16px;
+          width:100%;
+          box-sizing:border-box;
+        "
+      >
+
+        <div
+          style="
+            display:flex;
+            align-items:center;
+            gap:12px;
+            min-width:0;
+            flex:1;
+          "
+        >
+
+          <span
+            class="dot ${t.type === "income" ? "green" : "pink"}"
+            style="
+              flex-shrink:0;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+            "
+          >
             ${t.type === "income" ? "↓" : "↑"}
           </span>
 
-          <div>
-            <b>${escapeHtml(t.name)}</b>
-            <small style="display:block;color:#777;">
+          <div
+            style="
+              min-width:0;
+              overflow:hidden;
+            "
+          >
+            <b
+              style="
+                display:block;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow:ellipsis;
+              "
+            >
+              ${escapeHtml(t.name)}
+            </b>
+
+            <small
+              style="
+                display:block;
+                color:#777;
+                margin-top:3px;
+              "
+            >
               ${escapeHtml(t.category || "Umum")}
             </small>
           </div>
+
         </div>
 
-        <span style="font-weight:600;">
+        <span
+          style="
+            flex-shrink:0;
+            white-space:nowrap;
+            font-weight:600;
+            text-align:right;
+          "
+        >
           ${t.type === "income" ? "+" : "-"} ${money(t.amount)}
         </span>
+
       </div>
     `)
     .join("");
