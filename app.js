@@ -642,7 +642,9 @@ function renderItems() {
       <div style="margin-top:10px;">
 
         <button
-          onclick="editTransaction(${t.id})"
+          type="button"
+          class="edit-btn"
+          data-id="${t.id}"
           style="
             border:0;
             background:#eee9d8;
