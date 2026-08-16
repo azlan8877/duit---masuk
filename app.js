@@ -844,164 +844,115 @@ function renderRecent() {
 /* =========================
    HALAMAN TRANSAKSI
 ========================= */
-
 function renderTransactions() {
 
-  const list =
-    document.getElementById(
-      "transactionList"
-    );
+  const list = document.getElementById("transactionList");
 
-
-  if (!list) {
-    return;
-  }
-
+  if (!list) return;
 
   if (transactions.length === 0) {
 
     list.innerHTML = `
-
-      <div
-        style="
-          padding:30px;
-          text-align:center;
-          color:#777;
-        "
-      >
+      <div style="
+        padding:30px;
+        text-align:center;
+        color:#777;
+      ">
         Belum ada transaksi.
       </div>
-
     `;
 
     return;
   }
 
+  list.innerHTML = transactions.map(function(t) {
 
-  list.innerHTML =
-    transactions
+    return `
+      <div style="
+        padding:18px;
+        border-bottom:1px solid #eee;
+      ">
 
-      .map(function(t) {
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          gap:10px;
+        ">
 
-        return `
+          <div>
 
-          <div
-            style="
-              padding:18px;
-              border-bottom:1px solid #eee;
-            "
-          >
+            <strong style="
+              font-size:17px;
+              display:block;
+            ">
+              ${escapeHtml(t.name)}
+            </strong>
 
-            <div
-              style="
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                gap:10px;
-              "
-            >
-
-              <div>
-
-                <strong
-                  style="
-                    font-size:17px;
-                    display:block;
-                  "
-                >
-                  ${escapeHtml(t.name)}
-                </strong>
-
-
-                <small
-                  style="
-                    color:#777;
-                    display:block;
-                    margin-top:4px;
-                  "
-                >
-                  ${escapeHtml(t.category)}
-                </small>
-
-              </div>
-
-
-              <strong
-                style="
-                  white-space:nowrap;
-                  color:${
-                    t.type === "income"
-                      ? "#23734d"
-                      : "#555"
-                  };
-                "
-              >
-                ${
-                  t.type === "income"
-                    ? "+"
-                    : "-"
-                }
-                ${money(t.amount)}
-              </strong>
-
-            </div>
-
-
-            <div
-              style="
-                margin-top:10px;
-              "
-            >
-
-              <button
-                type="button"
-                onclick="editTransaction('${t.id}')"
-                style="
-                  border:0;
-                  background:#eee9d8;
-                  padding:10px 16px;
-                  border-radius:8px;
-                  margin-right:6px;
-                  cursor:pointer;
-                  font-size:15px;
-                "
-              >
-                Edit
-              </button>
-
-
-              <button
-                type="button"
-                onclick="deleteTransaction('${t.id}')"
-                style="
-                  border:0;
-                  background:#f9d9dc;
-                  color:#a44;
-                  padding:10px 16px;
-                  border-radius:8px;
-                  cursor:pointer;
-                  font-size:15px;
-                "
-              >
-                Hapus
-              </button>
-
-            </div>
+            <small style="
+              color:#777;
+              display:block;
+              margin-top:4px;
+            ">
+              ${escapeHtml(t.category || "Umum")}
+            </small>
 
           </div>
 
-        `;
+          <strong style="
+            white-space:nowrap;
+            color:${t.type === "income" ? "#23734d" : "#555"};
+          ">
+            ${t.type === "income" ? "+" : "-"} ${money(t.amount)}
+          </strong>
 
-      })
+        </div>
 
-      .join("");
+        <div style="
+          margin-top:10px;
+          display:flex;
+          gap:8px;
+        ">
+
+          <button
+            type="button"
+            onclick="window.editTransaction('${t.id}')"
+            style="
+              border:0;
+              background:#eee9d8;
+              padding:8px 16px;
+              border-radius:8px;
+              font-size:15px;
+              cursor:pointer;
+            "
+          >
+            Edit
+          </button>
+
+          <button
+            type="button"
+            onclick="window.deleteTransaction('${t.id}')"
+            style="
+              border:0;
+              background:#f9d9dc;
+              color:#a44;
+              padding:8px 16px;
+              border-radius:8px;
+              font-size:15px;
+              cursor:pointer;
+            "
+          >
+            Hapus
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+  }).join("");
 }
-
-
-/* =========================
-   ITEM BELI
-========================= */
-
+          
 function renderItems() {
 
   const list =
