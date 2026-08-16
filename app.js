@@ -1604,7 +1604,9 @@ function initApp() {
   render();
 }
 
-
+window.editTransaction = editTransaction;
+window.deleteTransaction = deleteTransaction;
+window.openAdd = openAdd;
 /* =========================
    DOM SIAP
 ========================= */
