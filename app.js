@@ -1,11 +1,17 @@
 const KEY_TX = "duitMasuk_transactions";
 const KEY_ACCOUNTS = "duitMasuk_accounts";
 
-let transactions = JSON.parse(localStorage.getItem(KEY_TX) || "[]");
-let accounts = JSON.parse(localStorage.getItem(KEY_ACCOUNTS) || "[]");
+let transactions = JSON.parse(
+  localStorage.getItem(KEY_TX) || "[]"
+);
+
+let accounts = JSON.parse(
+  localStorage.getItem(KEY_ACCOUNTS) || "[]"
+);
 
 let currentType = "income";
 let editingId = null;
+
 
 /* =========================
    ASAS
@@ -25,16 +31,25 @@ function escapeHtml(text) {
 }
 
 function saveData() {
-  localStorage.setItem(KEY_TX, JSON.stringify(transactions));
-  localStorage.setItem(KEY_ACCOUNTS, JSON.stringify(accounts));
+  localStorage.setItem(
+    KEY_TX,
+    JSON.stringify(transactions)
+  );
+
+  localStorage.setItem(
+    KEY_ACCOUNTS,
+    JSON.stringify(accounts)
+  );
 }
+
 
 /* =========================
    TUKAR HALAMAN
 ========================= */
 
 function show(id) {
-  document.querySelectorAll(".screen").forEach(el => {
+
+  document.querySelectorAll(".screen").forEach(function(el) {
     el.classList.add("hidden");
   });
 
@@ -50,14 +65,17 @@ function show(id) {
   }
 
   closeMenu();
+
   render();
 }
+
 
 /* =========================
    MENU
 ========================= */
 
 function openMenu() {
+
   let menu = document.getElementById("appMenu");
 
   if (!menu) {
@@ -65,10 +83,13 @@ function openMenu() {
     menu = document.getElementById("appMenu");
   }
 
-  menu.style.display = "block";
+  if (menu) {
+    menu.style.display = "block";
+  }
 }
 
 function closeMenu() {
+
   const menu = document.getElementById("appMenu");
 
   if (menu) {
@@ -78,43 +99,57 @@ function closeMenu() {
 
 function createMenu() {
 
-  if (document.getElementById("appMenu")) return;
+  if (document.getElementById("appMenu")) {
+    return;
+  }
 
   const menu = document.createElement("div");
 
   menu.id = "appMenu";
 
   menu.innerHTML = `
-    <div style="
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.35);
-      z-index:9998;
-    " onclick="closeMenu()"></div>
 
-    <div style="
-      position:fixed;
-      top:0;
-      left:0;
-      width:310px;
-      max-width:82%;
-      height:100vh;
-      background:#fffdf8;
-      z-index:9999;
-      padding:28px 20px;
-      box-sizing:border-box;
-      box-shadow:4px 0 20px rgba(0,0,0,.15);
-    ">
+    <div
+      onclick="closeMenu()"
+      style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.35);
+        z-index:9998;
+      "
+    ></div>
 
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin-bottom:28px;
-      ">
-        <strong style="font-size:25px;">Menu</strong>
+    <div
+      style="
+        position:fixed;
+        top:0;
+        left:0;
+        width:310px;
+        max-width:82%;
+        height:100vh;
+        background:#fffdf8;
+        z-index:9999;
+        padding:28px 20px;
+        box-sizing:border-box;
+        box-shadow:4px 0 20px rgba(0,0,0,.15);
+      "
+    >
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          margin-bottom:28px;
+        "
+      >
+
+        <strong style="font-size:25px;">
+          Menu
+        </strong>
 
         <button
+          type="button"
           onclick="closeMenu()"
           style="
             border:0;
@@ -122,30 +157,63 @@ function createMenu() {
             font-size:28px;
             cursor:pointer;
           "
-        >×</button>
+        >
+          ×
+        </button>
+
       </div>
 
-      <button onclick="show('home')" style="${menuButton()}">
+
+      <button
+        type="button"
+        onclick="show('home')"
+        style="${menuButton()}"
+      >
         🏠 &nbsp; Utama
       </button>
 
-      <button onclick="show('transactions')" style="${menuButton()}">
+
+      <button
+        type="button"
+        onclick="show('transactions')"
+        style="${menuButton()}"
+      >
         💰 &nbsp; Transaksi
       </button>
 
-      <button onclick="show('items')" style="${menuButton()}">
+
+      <button
+        type="button"
+        onclick="show('items')"
+        style="${menuButton()}"
+      >
         🛒 &nbsp; Item Beli
       </button>
 
-      <button onclick="show('accounts')" style="${menuButton()}">
+
+      <button
+        type="button"
+        onclick="show('accounts')"
+        style="${menuButton()}"
+      >
         🧮 &nbsp; Akaun
       </button>
 
-      <button onclick="show('report')" style="${menuButton()}">
+
+      <button
+        type="button"
+        onclick="show('report')"
+        style="${menuButton()}"
+      >
         📊 &nbsp; Laporan
       </button>
 
-      <button onclick="openAdd();closeMenu()" style="${menuButton()}">
+
+      <button
+        type="button"
+        onclick="openAdd(); closeMenu();"
+        style="${menuButton()}"
+      >
         ＋ &nbsp; Tambah Transaksi
       </button>
 
@@ -156,6 +224,7 @@ function createMenu() {
 }
 
 function menuButton() {
+
   return `
     width:100%;
     display:block;
@@ -171,8 +240,9 @@ function menuButton() {
   `;
 }
 
+
 /* =========================
-   TAMBAH / EDIT TRANSAKSI
+   TAMBAH TRANSAKSI
 ========================= */
 
 function openAdd() {
@@ -181,7 +251,10 @@ function openAdd() {
 
   const modal = document.getElementById("modal");
 
-  if (!modal) return;
+  if (!modal) {
+    alert("Borang transaksi tidak dijumpai.");
+    return;
+  }
 
   modal.classList.remove("hidden");
 
@@ -191,12 +264,29 @@ function openAdd() {
     title.textContent = "Tambah Transaksi";
   }
 
-  document.getElementById("name").value = "";
-  document.getElementById("amount").value = "";
-  document.getElementById("category").value = "";
+  const name = document.getElementById("name");
+  const amount = document.getElementById("amount");
+  const category = document.getElementById("category");
+
+  if (name) {
+    name.value = "";
+  }
+
+  if (amount) {
+    amount.value = "";
+  }
+
+  if (category) {
+    category.value = "";
+  }
 
   setType("income");
 }
+
+
+/* =========================
+   TUTUP MODAL
+========================= */
 
 function closeModal() {
 
@@ -209,60 +299,120 @@ function closeModal() {
   editingId = null;
 }
 
+
+/* =========================
+   JENIS TRANSAKSI
+========================= */
+
 function setType(type) {
 
   currentType = type;
 
-  const incomeTab = document.getElementById("incomeTab");
-  const expenseTab = document.getElementById("expenseTab");
+  const incomeTab =
+    document.getElementById("incomeTab");
+
+  const expenseTab =
+    document.getElementById("expenseTab");
 
   if (incomeTab) {
-    incomeTab.classList.toggle("sel", type === "income");
+    incomeTab.classList.toggle(
+      "sel",
+      type === "income"
+    );
   }
 
   if (expenseTab) {
-    expenseTab.classList.toggle("sel", type === "expense");
+    expenseTab.classList.toggle(
+      "sel",
+      type === "expense"
+    );
   }
 }
 
+
+/* =========================
+   SIMPAN TRANSAKSI
+========================= */
+
 function saveTx() {
 
-  const nameEl = document.getElementById("name");
-  const amountEl = document.getElementById("amount");
-  const categoryEl = document.getElementById("category");
+  const nameEl =
+    document.getElementById("name");
 
-  const name = nameEl.value.trim();
-  const amount = Number(amountEl.value);
-  const category = categoryEl.value.trim() || "Umum";
+  const amountEl =
+    document.getElementById("amount");
 
-  if (!name || !amount || amount <= 0) {
-    alert("Sila masukkan nama dan jumlah.");
+  const categoryEl =
+    document.getElementById("category");
+
+  if (!nameEl || !amountEl || !categoryEl) {
+    alert("Borang transaksi tidak lengkap.");
     return;
   }
 
+  const name =
+    nameEl.value.trim();
+
+  const amount =
+    Number(amountEl.value);
+
+  const category =
+    categoryEl.value.trim() || "Umum";
+
+
+  if (!name || !amount || amount <= 0) {
+
+    alert(
+      "Sila masukkan nama dan jumlah."
+    );
+
+    return;
+  }
+
+
+  /* EDIT */
+
   if (editingId !== null) {
 
-    const tx = transactions.find(t => t.id === editingId);
+    const tx = transactions.find(
+      function(t) {
+        return String(t.id) === String(editingId);
+      }
+    );
 
     if (tx) {
+
       tx.name = name;
       tx.amount = amount;
       tx.category = category;
       tx.type = currentType;
+
     }
 
-  } else {
+  }
+
+  /* TAMBAH */
+
+  else {
 
     transactions.unshift({
+
       id: Date.now(),
+
       name: name,
+
       amount: amount,
+
       category: category,
+
       type: currentType,
+
       date: new Date().toISOString()
+
     });
 
   }
+
 
   saveData();
 
@@ -273,63 +423,145 @@ function saveTx() {
   show("transactions");
 }
 
+
 /* =========================
-   EDIT
+   EDIT TRANSAKSI
 ========================= */
 
 function editTransaction(id) {
-  const tx = transactions.find(t => String(t.id) === String(id));
+
+  const tx = transactions.find(
+    function(t) {
+      return String(t.id) === String(id);
+    }
+  );
+
 
   if (!tx) {
-    alert("Transaksi tidak dijumpai.");
+
+    alert(
+      "Transaksi tidak dijumpai."
+    );
+
     return;
   }
+
+
+  const modal =
+    document.getElementById("modal");
+
+
+  if (!modal) {
+
+    alert(
+      "Borang Edit tidak dijumpai."
+    );
+
+    return;
+  }
+
 
   editingId = tx.id;
 
-  const modal = document.getElementById("modal");
-
-  if (!modal) {
-    alert("Borang Edit tidak dijumpai.");
-    return;
-  }
 
   modal.classList.remove("hidden");
 
-  const title = document.getElementById("modalTitle");
-  const name = document.getElementById("name");
-  const amount = document.getElementById("amount");
-  const category = document.getElementById("category");
 
-  if (title) title.textContent = "Edit Transaksi";
-  if (name) name.value = tx.name || "";
-  if (amount) amount.value = tx.amount || "";
-  if (category) category.value = tx.category || "";
+  const title =
+    document.getElementById("modalTitle");
 
-  setType(tx.type || "income");
+  const name =
+    document.getElementById("name");
+
+  const amount =
+    document.getElementById("amount");
+
+  const category =
+    document.getElementById("category");
+
+
+  if (title) {
+
+    title.textContent =
+      "Edit Transaksi";
+
+  }
+
+
+  if (name) {
+
+    name.value =
+      tx.name || "";
+
+  }
+
+
+  if (amount) {
+
+    amount.value =
+      tx.amount || "";
+
+  }
+
+
+  if (category) {
+
+    category.value =
+      tx.category || "";
+
+  }
+
+
+  setType(
+    tx.type || "income"
+  );
 }
+
+
 /* =========================
-   HAPUS
+   HAPUS TRANSAKSI
 ========================= */
 
 function deleteTransaction(id) {
 
-  const tx = transactions.find(t => t.id === id);
-
-  if (!tx) return;
-
-  const confirmDelete = confirm(
-    "Hapus transaksi \"" + tx.name + "\"?"
+  const tx = transactions.find(
+    function(t) {
+      return String(t.id) === String(id);
+    }
   );
 
-  if (!confirmDelete) return;
 
-  transactions = transactions.filter(t => t.id !== id);
+  if (!tx) {
+    return;
+  }
+
+
+  const confirmDelete =
+    confirm(
+      'Hapus transaksi "' +
+      tx.name +
+      '"?'
+    );
+
+
+  if (!confirmDelete) {
+    return;
+  }
+
+
+  transactions =
+    transactions.filter(
+      function(t) {
+        return String(t.id) !== String(id);
+      }
+    );
+
 
   saveData();
 
   render();
 }
+
 
 /* =========================
    AKAUN
@@ -337,47 +569,86 @@ function deleteTransaction(id) {
 
 function openAccount() {
 
-  const modal = document.getElementById("accountModal");
+  const modal =
+    document.getElementById("accountModal");
 
   if (modal) {
     modal.classList.remove("hidden");
   }
 }
 
+
 function closeAccount() {
 
-  const modal = document.getElementById("accountModal");
+  const modal =
+    document.getElementById("accountModal");
 
   if (modal) {
     modal.classList.add("hidden");
   }
 }
 
+
 function saveAccount() {
 
-  const name = document.getElementById("accName").value.trim();
-  const amount = Number(document.getElementById("accAmount").value);
+  const nameEl =
+    document.getElementById("accName");
 
-  if (!name || amount < 0) {
-    alert("Sila masukkan nama akaun dan baki.");
+  const amountEl =
+    document.getElementById("accAmount");
+
+
+  if (!nameEl || !amountEl) {
+
+    alert(
+      "Borang akaun tidak dijumpai."
+    );
+
     return;
   }
 
+
+  const name =
+    nameEl.value.trim();
+
+  const amount =
+    Number(amountEl.value);
+
+
+  if (!name || amount < 0) {
+
+    alert(
+      "Sila masukkan nama akaun dan baki."
+    );
+
+    return;
+  }
+
+
   accounts.push({
+
     id: Date.now(),
+
     name: name,
+
     amount: amount
+
   });
+
 
   saveData();
 
-  document.getElementById("accName").value = "";
-  document.getElementById("accAmount").value = "";
+
+  nameEl.value = "";
+
+  amountEl.value = "";
+
 
   closeAccount();
 
   render();
 }
+
 
 /* =========================
    RENDER UTAMA
@@ -385,54 +656,107 @@ function saveAccount() {
 
 function render() {
 
-  const income = transactions
-    .filter(t => t.type === "income")
-    .reduce((sum, t) => sum + Number(t.amount), 0);
+  const income =
+    transactions
 
-  const expense = transactions
-    .filter(t => t.type === "expense")
-    .reduce((sum, t) => sum + Number(t.amount), 0);
+      .filter(function(t) {
+        return t.type === "income";
+      })
 
-  const balance = income - expense;
+      .reduce(
+        function(sum, t) {
+          return sum + Number(t.amount);
+        },
+        0
+      );
 
-  const incomeTotal = document.getElementById("incomeTotal");
-  const expenseTotal = document.getElementById("expenseTotal");
-  const balanceEl = document.getElementById("balance");
-  const incomeRow = document.getElementById("incomeRow");
-  const expenseRow = document.getElementById("expenseRow");
+
+  const expense =
+    transactions
+
+      .filter(function(t) {
+        return t.type === "expense";
+      })
+
+      .reduce(
+        function(sum, t) {
+          return sum + Number(t.amount);
+        },
+        0
+      );
+
+
+  const balance =
+    income - expense;
+
+
+  const incomeTotal =
+    document.getElementById("incomeTotal");
+
+  const expenseTotal =
+    document.getElementById("expenseTotal");
+
+  const balanceEl =
+    document.getElementById("balance");
+
+  const incomeRow =
+    document.getElementById("incomeRow");
+
+  const expenseRow =
+    document.getElementById("expenseRow");
+
 
   if (incomeTotal) {
-    incomeTotal.textContent = money(income);
+    incomeTotal.textContent =
+      money(income);
   }
+
 
   if (expenseTotal) {
-    expenseTotal.textContent = money(expense);
+    expenseTotal.textContent =
+      money(expense);
   }
+
 
   if (balanceEl) {
-    balanceEl.textContent = money(balance);
+    balanceEl.textContent =
+      money(balance);
   }
+
 
   if (incomeRow) {
-    incomeRow.textContent = money(income);
+    incomeRow.textContent =
+      money(income);
   }
+
 
   if (expenseRow) {
-    expenseRow.textContent = money(expense);
+    expenseRow.textContent =
+      money(expense);
   }
 
-  const savingRow = document.getElementById("savingRow");
+
+  const savingRow =
+    document.getElementById("savingRow");
+
 
   if (savingRow) {
-    savingRow.textContent = money(0);
+    savingRow.textContent =
+      money(0);
   }
 
+
   renderRecent();
+
   renderAccounts();
+
   renderItems();
+
   renderTransactions();
+
   renderReport();
 }
+
 
 /* =========================
    TRANSAKSI TERBARU
@@ -440,42 +764,82 @@ function render() {
 
 function renderRecent() {
 
-  const recent = document.getElementById("recent");
+  const recent =
+    document.getElementById("recent");
 
-  if (!recent) return;
+
+  if (!recent) {
+    return;
+  }
+
 
   if (transactions.length === 0) {
 
     recent.innerHTML = `
+
       <div class="row">
-        <span>Belum ada transaksi</span>
+
+        <span>
+          Belum ada transaksi
+        </span>
+
       </div>
+
     `;
 
     return;
   }
 
-  recent.innerHTML = transactions
-    .slice(0, 5)
-    .map(t => `
 
-      <div class="row">
+  recent.innerHTML =
+    transactions
 
-        <span class="dot ${t.type === "income" ? "green" : "pink"}">
-          ${t.type === "income" ? "↓" : "↑"}
-        </span>
+      .slice(0, 5)
 
-        <b>${escapeHtml(t.name)}</b>
+      .map(function(t) {
 
-        <span>
-          ${t.type === "income" ? "+" : "-"} ${money(t.amount)}
-        </span>
+        return `
 
-      </div>
+          <div class="row">
 
-    `)
-    .join("");
+            <span
+              class="dot ${
+                t.type === "income"
+                  ? "green"
+                  : "pink"
+              }"
+            >
+              ${
+                t.type === "income"
+                  ? "↓"
+                  : "↑"
+              }
+            </span>
+
+
+            <b>
+              ${escapeHtml(t.name)}
+            </b>
+
+
+            <span>
+              ${
+                t.type === "income"
+                  ? "+"
+                  : "-"
+              }
+              ${money(t.amount)}
+            </span>
+
+          </div>
+
+        `;
+
+      })
+
+      .join("");
 }
+
 
 /* =========================
    HALAMAN TRANSAKSI
@@ -483,101 +847,156 @@ function renderRecent() {
 
 function renderTransactions() {
 
-  const list = document.getElementById("transactionList");
+  const list =
+    document.getElementById(
+      "transactionList"
+    );
 
-  if (!list) return;
+
+  if (!list) {
+    return;
+  }
+
 
   if (transactions.length === 0) {
 
     list.innerHTML = `
-      <div style="
-        padding:30px;
-        text-align:center;
-        color:#777;
-      ">
+
+      <div
+        style="
+          padding:30px;
+          text-align:center;
+          color:#777;
+        "
+      >
         Belum ada transaksi.
       </div>
+
     `;
 
     return;
   }
 
-  list.innerHTML = transactions.map(t => `
 
-    <div style="
-      padding:18px;
-      border-bottom:1px solid #eee;
-    ">
+  list.innerHTML =
+    transactions
 
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        gap:10px;
-      ">
+      .map(function(t) {
 
-        <div>
+        return `
 
-          <strong style="
-            font-size:17px;
-            display:block;
-          ">
-            ${escapeHtml(t.name)}
-          </strong>
+          <div
+            style="
+              padding:18px;
+              border-bottom:1px solid #eee;
+            "
+          >
 
-          <small style="
-            color:#777;
-            display:block;
-            margin-top:4px;
-          ">
-            ${escapeHtml(t.category)}
-          </small>
+            <div
+              style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:10px;
+              "
+            >
 
-        </div>
+              <div>
 
-        <strong style="
-          white-space:nowrap;
-          color:${t.type === "income" ? "#23734d" : "#555"};
-        ">
-          ${t.type === "income" ? "+" : "-"} ${money(t.amount)}
-        </strong>
+                <strong
+                  style="
+                    font-size:17px;
+                    display:block;
+                  "
+                >
+                  ${escapeHtml(t.name)}
+                </strong>
 
-      </div>
 
-      <div style="margin-top:10px;">
+                <small
+                  style="
+                    color:#777;
+                    display:block;
+                    margin-top:4px;
+                  "
+                >
+                  ${escapeHtml(t.category)}
+                </small>
 
-        <button
-          onclick="editTransaction(${t.id})"
-          style="
-            border:0;
-            background:#eee9d8;
-            padding:7px 14px;
-            border-radius:8px;
-            margin-right:6px;
-          "
-        >
-          Edit
-        </button>
+              </div>
 
-        <button
-          onclick="deleteTransaction(${t.id})"
-          style="
-            border:0;
-            background:#f9d9dc;
-            color:#a44;
-            padding:7px 14px;
-            border-radius:8px;
-          "
-        >
-          Hapus
-        </button>
 
-      </div>
+              <strong
+                style="
+                  white-space:nowrap;
+                  color:${
+                    t.type === "income"
+                      ? "#23734d"
+                      : "#555"
+                  };
+                "
+              >
+                ${
+                  t.type === "income"
+                    ? "+"
+                    : "-"
+                }
+                ${money(t.amount)}
+              </strong>
 
-    </div>
+            </div>
 
-  `).join("");
+
+            <div
+              style="
+                margin-top:10px;
+              "
+            >
+
+              <button
+                type="button"
+                onclick="editTransaction('${t.id}')"
+                style="
+                  border:0;
+                  background:#eee9d8;
+                  padding:10px 16px;
+                  border-radius:8px;
+                  margin-right:6px;
+                  cursor:pointer;
+                  font-size:15px;
+                "
+              >
+                Edit
+              </button>
+
+
+              <button
+                type="button"
+                onclick="deleteTransaction('${t.id}')"
+                style="
+                  border:0;
+                  background:#f9d9dc;
+                  color:#a44;
+                  padding:10px 16px;
+                  border-radius:8px;
+                  cursor:pointer;
+                  font-size:15px;
+                "
+              >
+                Hapus
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+
+      .join("");
 }
+
 
 /* =========================
    ITEM BELI
@@ -585,96 +1004,144 @@ function renderTransactions() {
 
 function renderItems() {
 
-  const list = document.getElementById("itemList");
+  const list =
+    document.getElementById("itemList");
 
-  if (!list) return;
 
-  const expenses = transactions.filter(
-    t => t.type === "expense"
-  );
+  if (!list) {
+    return;
+  }
+
+
+  const expenses =
+    transactions.filter(
+      function(t) {
+        return t.type === "expense";
+      }
+    );
+
 
   if (expenses.length === 0) {
 
     list.innerHTML = `
+
       <div class="row">
-        <span>Belum ada item beli</span>
+
+        <span>
+          Belum ada item beli
+        </span>
+
       </div>
+
     `;
 
     return;
   }
 
-  list.innerHTML = expenses.map(t => `
 
-    <div style="
-      padding:18px;
-      border-bottom:1px solid #eee;
-    ">
+  list.innerHTML =
+    expenses
 
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-      ">
+      .map(function(t) {
 
-        <div>
+        return `
 
-          <b style="font-size:17px;">
-            ${escapeHtml(t.name)}
-          </b>
+          <div
+            style="
+              padding:18px;
+              border-bottom:1px solid #eee;
+            "
+          >
 
-          <small style="
-            display:block;
-            color:#777;
-            margin-top:4px;
-          ">
-            ${escapeHtml(t.category)}
-          </small>
+            <div
+              style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+              "
+            >
 
-        </div>
+              <div>
 
-        <strong>
-          - ${money(t.amount)}
-        </strong>
+                <b
+                  style="
+                    font-size:17px;
+                  "
+                >
+                  ${escapeHtml(t.name)}
+                </b>
 
-      </div>
 
-      <div style="margin-top:10px;">
+                <small
+                  style="
+                    display:block;
+                    color:#777;
+                    margin-top:4px;
+                  "
+                >
+                  ${escapeHtml(t.category)}
+                </small>
 
-        <button
-          type="button"
-          class="edit-btn"
-          data-id="${t.id}"
-          style="
-            border:0;
-            background:#eee9d8;
-            padding:7px 14px;
-            border-radius:8px;
-            margin-right:6px;
-          "
-        >
-          Edit
-        </button>
+              </div>
 
-        <button
-          onclick="deleteTransaction(${t.id})"
-          style="
-            border:0;
-            background:#f9d9dc;
-            color:#a44;
-            padding:7px 14px;
-            border-radius:8px;
-          "
-        >
-          Hapus
-        </button>
 
-      </div>
+              <strong>
+                - ${money(t.amount)}
+              </strong>
 
-    </div>
+            </div>
 
-  `).join("");
+
+            <div
+              style="
+                margin-top:10px;
+              "
+            >
+
+              <button
+                type="button"
+                onclick="editTransaction('${t.id}')"
+                style="
+                  border:0;
+                  background:#eee9d8;
+                  padding:10px 16px;
+                  border-radius:8px;
+                  margin-right:6px;
+                  cursor:pointer;
+                  font-size:15px;
+                "
+              >
+                Edit
+              </button>
+
+
+              <button
+                type="button"
+                onclick="deleteTransaction('${t.id}')"
+                style="
+                  border:0;
+                  background:#f9d9dc;
+                  color:#a44;
+                  padding:10px 16px;
+                  border-radius:8px;
+                  cursor:pointer;
+                  font-size:15px;
+                "
+              >
+                Hapus
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+      })
+
+      .join("");
 }
+
 
 /* =========================
    AKAUN
@@ -682,41 +1149,79 @@ function renderItems() {
 
 function renderAccounts() {
 
-  const list = document.getElementById("accountList");
-  const total = document.getElementById("accountTotal");
+  const list =
+    document.getElementById(
+      "accountList"
+    );
 
-  if (!list || !total) return;
+  const total =
+    document.getElementById(
+      "accountTotal"
+    );
 
-  const sum = accounts.reduce(
-    (s, a) => s + Number(a.amount),
-    0
-  );
 
-  total.textContent = money(sum);
+  if (!list || !total) {
+    return;
+  }
+
+
+  const sum =
+    accounts.reduce(
+      function(s, a) {
+        return s + Number(a.amount);
+      },
+      0
+    );
+
+
+  total.textContent =
+    money(sum);
+
 
   if (accounts.length === 0) {
 
     list.innerHTML = `
+
       <div class="row">
-        <span>Belum ada akaun</span>
+
+        <span>
+          Belum ada akaun
+        </span>
+
       </div>
+
     `;
 
     return;
   }
 
-  list.innerHTML = accounts.map(a => `
 
-    <div class="row">
+  list.innerHTML =
+    accounts
 
-      <b>${escapeHtml(a.name)}</b>
+      .map(function(a) {
 
-      <span>${money(a.amount)}</span>
+        return `
 
-    </div>
+          <div class="row">
 
-  `).join("");
+            <b>
+              ${escapeHtml(a.name)}
+            </b>
+
+            <span>
+              ${money(a.amount)}
+            </span>
+
+          </div>
+
+        `;
+
+      })
+
+      .join("");
 }
+
 
 /* =========================
    LAPORAN
@@ -724,38 +1229,110 @@ function renderAccounts() {
 
 function renderReport() {
 
-  const income = transactions
-    .filter(t => t.type === "income")
-    .reduce((s, t) => s + Number(t.amount), 0);
+  const income =
+    transactions
 
-  const expense = transactions
-    .filter(t => t.type === "expense")
-    .reduce((s, t) => s + Number(t.amount), 0);
+      .filter(function(t) {
+        return t.type === "income";
+      })
 
-  const balance = income - expense;
+      .reduce(
+        function(s, t) {
+          return s + Number(t.amount);
+        },
+        0
+      );
 
-  const incomeEl = document.getElementById("reportIncome");
-  const expenseEl = document.getElementById("reportExpense");
-  const balanceEl = document.getElementById("reportBalance");
-  const countEl = document.getElementById("reportCount");
-  const averageEl = document.getElementById("reportAverage");
 
-  if (incomeEl) incomeEl.textContent = money(income);
-  if (expenseEl) expenseEl.textContent = money(expense);
-  if (balanceEl) balanceEl.textContent = money(balance);
+  const expense =
+    transactions
+
+      .filter(function(t) {
+        return t.type === "expense";
+      })
+
+      .reduce(
+        function(s, t) {
+          return s + Number(t.amount);
+        },
+        0
+      );
+
+
+  const balance =
+    income - expense;
+
+
+  const incomeEl =
+    document.getElementById(
+      "reportIncome"
+    );
+
+  const expenseEl =
+    document.getElementById(
+      "reportExpense"
+    );
+
+  const balanceEl =
+    document.getElementById(
+      "reportBalance"
+    );
+
+  const countEl =
+    document.getElementById(
+      "reportCount"
+    );
+
+  const averageEl =
+    document.getElementById(
+      "reportAverage"
+    );
+
+
+  if (incomeEl) {
+    incomeEl.textContent =
+      money(income);
+  }
+
+
+  if (expenseEl) {
+    expenseEl.textContent =
+      money(expense);
+  }
+
+
+  if (balanceEl) {
+    balanceEl.textContent =
+      money(balance);
+  }
+
 
   if (countEl) {
-    countEl.textContent = transactions.length;
+    countEl.textContent =
+      transactions.length;
   }
 
+
+  const expenseCount =
+    transactions.filter(
+      function(t) {
+        return t.type === "expense";
+      }
+    ).length;
+
+
   if (averageEl) {
-    averageEl.textContent = money(
-      transactions.length
-        ? expense / transactions.filter(t => t.type === "expense").length || 0
-        : 0
-    );
+
+    averageEl.textContent =
+      money(
+        expenseCount > 0
+          ? expense / expenseCount
+          : 0
+      );
+
   }
 }
+
 
 /* =========================
    CIPTA HALAMAN TAMBAHAN
@@ -763,99 +1340,213 @@ function renderReport() {
 
 function createExtraScreens() {
 
-  const app = document.getElementById("app");
+  const app =
+    document.getElementById("app");
 
-  if (!app) return;
+
+  if (!app) {
+    return;
+  }
+
 
   /* TRANSACTIONS */
 
-  if (!document.getElementById("transactions")) {
+  if (
+    !document.getElementById(
+      "transactions"
+    )
+  ) {
 
-    const section = document.createElement("section");
+    const section =
+      document.createElement(
+        "section"
+      );
 
-    section.className = "screen hidden";
-    section.id = "transactions";
+
+    section.className =
+      "screen hidden";
+
+
+    section.id =
+      "transactions";
+
 
     section.innerHTML = `
 
       <header class="pagehead">
 
-        <button onclick="show('home')">‹</button>
+        <button
+          type="button"
+          onclick="show('home')"
+        >
+          ‹
+        </button>
 
-        <h2>Transaksi</h2>
 
-        <button onclick="openAdd()">＋</button>
+        <h2>
+          Transaksi
+        </h2>
+
+
+        <button
+          type="button"
+          onclick="openAdd()"
+        >
+          ＋
+        </button>
 
       </header>
 
-      <div id="transactionList"
+
+      <div
+        id="transactionList"
         style="
           background:#fff;
           border-radius:22px;
           overflow:hidden;
           margin:20px;
-        ">
-      </div>
+        "
+      ></div>
 
     `;
+
 
     app.appendChild(section);
   }
 
+
   /* REPORT */
 
-  if (!document.getElementById("report")) {
+  if (
+    !document.getElementById(
+      "report"
+    )
+  ) {
 
-    const section = document.createElement("section");
+    const section =
+      document.createElement(
+        "section"
+      );
 
-    section.className = "screen hidden";
-    section.id = "report";
+
+    section.className =
+      "screen hidden";
+
+
+    section.id =
+      "report";
+
 
     section.innerHTML = `
 
       <header class="pagehead">
 
-        <button onclick="show('home')">‹</button>
+        <button
+          type="button"
+          onclick="show('home')"
+        >
+          ‹
+        </button>
 
-        <h2>Laporan</h2>
 
-        <button onclick="show('home')">⌂</button>
+        <h2>
+          Laporan
+        </h2>
+
+
+        <button
+          type="button"
+          onclick="show('home')"
+        >
+          ⌂
+        </button>
 
       </header>
 
-      <div style="padding:20px;">
+
+      <div
+        style="
+          padding:20px;
+        "
+      >
 
         <div class="card">
-          <small>Duit Masuk</small>
-          <strong id="reportIncome">RM 0.00</strong>
+
+          <small>
+            Duit Masuk
+          </small>
+
+          <strong id="reportIncome">
+            RM 0.00
+          </strong>
+
         </div>
 
+
         <div class="card">
-          <small>Duit Keluar</small>
-          <strong id="reportExpense">RM 0.00</strong>
+
+          <small>
+            Duit Keluar
+          </small>
+
+          <strong id="reportExpense">
+            RM 0.00
+          </strong>
+
         </div>
+
 
         <div class="balance">
+
           <div>
-            <small>Baki</small>
-            <strong id="reportBalance">RM 0.00</strong>
+
+            <small>
+              Baki
+            </small>
+
+            <strong id="reportBalance">
+              RM 0.00
+            </strong>
+
           </div>
+
         </div>
 
-        <h3 style="margin-top:25px;">
+
+        <h3
+          style="
+            margin-top:25px;
+          "
+        >
           Ringkasan
         </h3>
+
 
         <div class="list">
 
           <div class="row">
-            <b>Jumlah transaksi</b>
-            <span id="reportCount">0</span>
+
+            <b>
+              Jumlah transaksi
+            </b>
+
+            <span id="reportCount">
+              0
+            </span>
+
           </div>
 
+
           <div class="row">
-            <b>Purata perbelanjaan</b>
-            <span id="reportAverage">RM 0.00</span>
+
+            <b>
+              Purata perbelanjaan
+            </b>
+
+            <span id="reportAverage">
+              RM 0.00
+            </span>
+
           </div>
 
         </div>
@@ -864,66 +1555,72 @@ function createExtraScreens() {
 
     `;
 
+
     app.appendChild(section);
   }
 }
 
+
 /* =========================
-   BUTANG MENU ☰
+   BUTANG MENU
 ========================= */
 
 function setupMenuButton() {
 
-  const hamb = document.querySelector(".hamb");
+  const hamb =
+    document.querySelector(
+      ".hamb"
+    );
 
-  if (!hamb) return;
 
-  hamb.style.cursor = "pointer";
+  if (!hamb) {
+    return;
+  }
 
-  hamb.onclick = function() {
-    openMenu();
-  };
+
+  hamb.style.cursor =
+    "pointer";
+
+
+  hamb.onclick =
+    function() {
+      openMenu();
+    };
 }
-function setupEditButtons() {
-  document.addEventListener("click", function(event) {
 
-    const button = event.target.closest(".edit-btn");
 
-    if (!button) return;
-
-    alert("BUTANG EDIT BERFUNGSI");
-
-  });
-}
-  document.addEventListener("click", function(event) {
-
-    const button = event.target.closest(".edit-btn");
-
-    if (!button) return;
-
-    const id = button.getAttribute("data-id");
-
-    editTransaction(id);
-  });
-}
 /* =========================
    MULA APP
 ========================= */
 
-document.addEventListener("DOMContentLoaded", function() {
+function initApp() {
 
   createMenu();
+
   createExtraScreens();
 
   setupMenuButton();
-  setupEditButtons();
 
   render();
+}
 
-});
 
-/* Jika script dimuat selepas DOM */
-createMenu();
-createExtraScreens();
-setupMenuButton();
-render();
+/* =========================
+   DOM SIAP
+========================= */
+
+if (
+  document.readyState ===
+  "loading"
+) {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initApp
+  );
+
+} else {
+
+  initApp();
+
+}
