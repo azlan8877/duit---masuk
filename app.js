@@ -884,7 +884,18 @@ function setupMenuButton() {
     openMenu();
   };
 }
+function setupEditButtons() {
+  document.addEventListener("click", function(event) {
 
+    const button = event.target.closest(".edit-btn");
+
+    if (!button) return;
+
+    const id = button.getAttribute("data-id");
+
+    editTransaction(id);
+  });
+}
 /* =========================
    MULA APP
 ========================= */
@@ -895,6 +906,7 @@ document.addEventListener("DOMContentLoaded", function() {
   createExtraScreens();
 
   setupMenuButton();
+  setupEditButtons();
 
   render();
 
