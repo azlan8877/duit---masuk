@@ -1,9 +1,18 @@
 {
-  "name":"Duit Masuk",
-  "short_name":"Duit Masuk",
-  "start_url":"./index.html",
-  "display":"standalone",
-  "background_color":"#faf8f3",
-  "theme_color":"#173b2b",
-  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+  "name": "Duit Masuk",
+  "short_name": "Duit Masuk",
+  "description": "Aplikasi rekod duit masuk dan duit keluar",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#faf8f3",
+  "theme_color": "#173b2b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
